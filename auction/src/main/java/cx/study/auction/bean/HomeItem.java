@@ -1,18 +1,15 @@
 package cx.study.auction.bean;
 
-import java.util.List;
-
 /**
  * 首页布局
  * Created by cheng.xiao on 2017/3/9.
  */
 
-public class HomeItem {
-    public static final int TITLE = 1;
-    public static final int CONTENT = 2;
+public class HomeItem<T> {
+    public static final int TITLE = 0;
+    public static final int CONTENT = 1;
     private int type;
-    private String typeName;
-    private List<Commodity> commodities;
+    private T obj;
 
     public int getType() {
         return type;
@@ -22,19 +19,11 @@ public class HomeItem {
         this.type = type;
     }
 
-    public List<Commodity> getCommodities() {
-        return commodities;
+    public T getObj() {
+        return obj;
     }
 
-    public void setCommodities(List<Commodity> commodities) {
-        this.commodities = commodities;
-    }
-
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
+    public void setObj(T obj) {
+        this.obj = obj;
     }
 }
