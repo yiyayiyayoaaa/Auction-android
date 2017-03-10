@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -37,6 +38,11 @@ import cx.study.auction.bean.HomeContentItem;
 import cx.study.auction.bean.HomeItem;
 import cx.study.auction.bean.HomeTitleItem;
 import cx.study.auction.event.ViewPagerChangeEvent;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static org.greenrobot.eventbus.EventBus.TAG;
 
@@ -167,6 +173,24 @@ public class HomeFragment extends Fragment{
             homeItem.setObj(commodity);
             homeItems.add(homeItem);
         }
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .get()
+                .url("http://192.168.0.104:8080/rest/homeInfo.do")
+                .build();
+        okHttpClient.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.d(TAG, "onResponse: " + response.body().string());
+                    }
+                });
     }
 
 

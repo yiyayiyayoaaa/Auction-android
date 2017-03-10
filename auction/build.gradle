@@ -43,4 +43,10 @@ dependencies {
     //工具包
     compile 'com.google.guava:guava:20.0'//google工具包
     compile 'com.google.code.gson:gson:2.8.0'//gson工具包
+
+    //调试,日志
+    compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'//调试库
+    compile 'com.orhanobut:logger:1.15'//日志
+    compile 'com.github.markzhai:blockcanary-android:1.4.0'
+
 }
