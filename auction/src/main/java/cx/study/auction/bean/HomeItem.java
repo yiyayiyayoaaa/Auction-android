@@ -26,4 +26,13 @@ public class HomeItem<T> {
     public void setObj(T obj) {
         this.obj = obj;
     }
+
+
+    @Override
+    public String toString() {
+        return "HomeItem{" +
+                "type=" + type +
+                ", obj=" + obj +
+                '}';
+    }
 }

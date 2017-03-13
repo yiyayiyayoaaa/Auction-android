@@ -34,7 +34,7 @@ public class Commodity implements Serializable{
     private Integer status;
     private Date startTime;
     private Date endTime;
-    List<String> imgUrls;
+    private List<String> imageUrls;
     public Integer getId() {
         return id;
     }
@@ -163,11 +163,34 @@ public class Commodity implements Serializable{
         this.endTime = endTime;
     }
 
-    public List<String> getImgUrls() {
-        return imgUrls;
+    public List<String> getImageUrls() {
+        return imageUrls;
     }
 
-    public void setImgUrls(List<String> imgUrls) {
-        this.imgUrls = imgUrls;
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
+    }
+
+    @Override
+    public String toString() {
+        return "Commodity{" +
+                "id=" + id +
+                ", commodityName='" + commodityName + '\'' +
+                ", typeId=" + typeId +
+                ", typeName='" + typeName + '\'' +
+                ", description='" + description + '\'' +
+                ", customerId=" + customerId +
+                ", customerName='" + customerName + '\'' +
+                ", appraisedPrice=" + appraisedPrice +
+                ", reservePrice=" + reservePrice +
+                ", startingPrice=" + startingPrice +
+                ", bidIncrements=" + bidIncrements +
+                ", hammerPrice=" + hammerPrice +
+                ", biddingDeposit=" + biddingDeposit +
+                ", status=" + status +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", imageUrls=" + imageUrls +
+                '}';
     }
 }

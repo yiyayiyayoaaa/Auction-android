@@ -1,4 +1,4 @@
-package cx.study.auction.http;
+package cx.study.auction.model.rest.http;
 
 import android.os.Handler;
 import android.os.Looper;

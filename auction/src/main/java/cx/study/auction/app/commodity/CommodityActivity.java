@@ -85,7 +85,7 @@ public class CommodityActivity extends BaseActivity{
 
     private void initViewPager(){
         if (commodity != null){
-            for (String url : commodity.getImgUrls()){
+            for (String url : commodity.getImageUrls()){
                 ImageView view = (ImageView) LayoutInflater.from(this).inflate(R.layout.view_pager_item, null);
                 Picasso.with(this)
                         .load(url)

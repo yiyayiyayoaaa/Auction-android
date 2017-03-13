@@ -21,9 +21,8 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -34,12 +33,18 @@ import butterknife.ButterKnife;
 import cx.study.auction.R;
 import cx.study.auction.app.commodity.CommodityActivity;
 import cx.study.auction.bean.Commodity;
-import cx.study.auction.bean.HomeContentItem;
 import cx.study.auction.bean.HomeItem;
-import cx.study.auction.bean.HomeTitleItem;
+import cx.study.auction.contants.HttpRest;
 import cx.study.auction.event.ViewPagerChangeEvent;
-import okhttp3.Call;
-import okhttp3.Callback;
+import cx.study.auction.model.rest.json2object.Json2HomeItem;
+import cx.study.auction.util.MCProgress;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -60,18 +65,34 @@ public class HomeFragment extends Fragment{
     ViewPager viewPager;
     @Bind(R.id.home_recycle_view)
     RecyclerView recyclerView;
-    List<HomeItem> homeItems = Lists.newArrayList();
+
     List<ImageView> viewList = Lists.newArrayList();
+    HomeAdapter adapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,null);
         ButterKnife.bind(this,view);
-        loadDate();
         initViewPager();
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),8,GridLayoutManager.VERTICAL,false));
-        HomeAdapter adapter = new HomeAdapter(homeItems);
-        recyclerView.setAdapter(adapter);
+
+        Observable.create(new ObservableOnSubscribe<List<HomeItem>>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<List<HomeItem>> e) throws Exception {
+                MCProgress.show("正在加载",getActivity());
+                e.onNext(loadData());
+            }
+        }).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<HomeItem>>() {
+                    @Override
+                    public void accept(@NonNull List<HomeItem> homeItems) throws Exception {
+                        MCProgress.dismiss();
+                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),8,GridLayoutManager.VERTICAL,false));
+                        adapter = new HomeAdapter(homeItems);
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
         return view;
     }
 
@@ -138,59 +159,59 @@ public class HomeFragment extends Fragment{
         },10,10, TimeUnit.SECONDS);
     }
 
-    private void loadDate() {
-        HomeItem<String> item1 = new HomeTitleItem();
-        item1.setType(HomeItem.TITLE);
-        item1.setObj("正在热拍");
-        homeItems.add(item1);
-        for (int i = 0; i < 8; i ++){
-            HomeItem<Commodity> homeItem = new HomeContentItem();
-            homeItem.setType(HomeItem.CONTENT);
-            Commodity commodity = new Commodity();
-            commodity.setCommodityName("Aaa aaa aaa" + i);
-            List<String> imgUrls = new ArrayList<>();
-            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-            commodity.setImgUrls(imgUrls);
-            homeItem.setObj(commodity);
-            homeItems.add(homeItem);
-        }
-        HomeItem<String> item2 = new HomeTitleItem();
-        item2.setType(HomeItem.TITLE);
-        item2.setObj("即将开始");
-        homeItems.add(item2);
-        for (int i = 0; i < 8; i ++){
-            HomeItem<Commodity> homeItem = new HomeContentItem();
-            homeItem.setType(HomeItem.CONTENT);
-            Commodity commodity = new Commodity();
-            commodity.setCommodityName("Bbb bbb bbb" + i);
-            List<String> imgUrls = new ArrayList<>();
-            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-            commodity.setImgUrls(imgUrls);
-            homeItem.setObj(commodity);
-            homeItems.add(homeItem);
-        }
+    private List<HomeItem> loadData() throws Exception {
+       // List<HomeItem> homeItems = Lists.newArrayList();
+//        HomeItem<String> item1 = new HomeTitleItem();
+//        item1.setType(HomeItem.TITLE);
+//        item1.setObj("正在热拍");
+//        homeItems.add(item1);
+//        for (int i = 0; i < 8; i ++){
+//            HomeItem<Commodity> homeItem = new HomeContentItem();
+//            homeItem.setType(HomeItem.CONTENT);
+//            Commodity commodity = new Commodity();
+//            commodity.setCommodityName("Aaa aaa aaa" + i);
+//            List<String> imgUrls = new ArrayList<>();
+//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
+//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
+//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
+//            commodity.setImageUrls(imgUrls);
+//            homeItem.setObj(commodity);
+//            homeItems.add(homeItem);
+//        }
+//        HomeItem<String> item2 = new HomeTitleItem();
+//        item2.setType(HomeItem.TITLE);
+//        item2.setObj("即将开始");
+//        homeItems.add(item2);
+//        for (int i = 0; i < 8; i ++){
+//            HomeItem<Commodity> homeItem = new HomeContentItem();
+//            homeItem.setType(HomeItem.CONTENT);
+//            Commodity commodity = new Commodity();
+//            commodity.setCommodityName("Bbb bbb bbb" + i);
+//            List<String> imgUrls = new ArrayList<>();
+//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
+//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
+//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
+//            commodity.setImageUrls(imgUrls);
+//            homeItem.setObj(commodity);
+//            homeItems.add(homeItem);
+//        }
 
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .get()
-                .url("http://192.168.0.104:8080/rest/homeInfo.do")
+                .url(HttpRest.HOME_PAGE_REST)
                 .build();
-        okHttpClient.newCall(request)
-                .enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        Log.d(TAG, "onResponse: " + response.body().string());
-                    }
-                });
+        Response response = okHttpClient.newCall(request).execute();
+        String json = response.body().string();
+//        List<HomeItem> homeItems = new Gson().fromJson(json, new TypeToken<List<HomeItem>>() {
+//                        }.getType());
+        List<HomeItem> homeItems = Lists.newArrayList();
+        JSONArray jsonArray = new JSONArray(json);
+        for (int i = 0; i < jsonArray.length(); i ++){
+            HomeItem homeItem = new Json2HomeItem().json2Object(jsonArray.optJSONObject(i));
+            homeItems.add(homeItem);
+        }
+        return homeItems;
     }
 
 
@@ -247,16 +268,19 @@ public class HomeFragment extends Fragment{
             switch (homeItem.getType()){
                 case HomeItem.TITLE:
                     HomeTitleHolder titleHolder = (HomeTitleHolder) holder;
-                    HomeItem<String> titleItem = (HomeTitleItem)homeItem;
-                    titleHolder.itemTitle.setText(titleItem.getObj());
+                    //HomeItem<String> titleItem = (HomeTitleItem) homeItem;
+                    titleHolder.itemTitle.setText((String) homeItem.getObj());
                     titleHolder.itemMore.setText("更多");
                     break;
                 case HomeItem.CONTENT:
                     HomeContentHolder contentHolder = (HomeContentHolder) holder;
-                    final HomeItem<Commodity> contentItem = (HomeContentItem)homeItem;
-                    final Commodity commodity = contentItem.getObj();
+                   // final HomeItem<Commodity> contentItem = (HomeContentItem)homeItem;
+                    final Commodity commodity = (Commodity) homeItem.getObj();
+                    String imageUrl = commodity.getImageUrls().get(0);
+                    Log.d(TAG, "onBindViewHolder: " + imageUrl);
                     Picasso.with(getActivity())
-                            .load(commodity.getImgUrls().get(0))
+                            .load(HttpRest.SERVER_URL + imageUrl)
+                            .resize(100,200)
                             .into(contentHolder.itemImage);
                     contentHolder.itemName.setText(commodity.getCommodityName());
 

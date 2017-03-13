@@ -1,4 +1,4 @@
-package cx.study.auction.http;
+package cx.study.auction.model.rest.http;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
