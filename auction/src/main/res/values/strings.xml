@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Auction</string>
     <string name="home">首页</string>
+
+
+    <string name="start_price">起拍价:¥%1$.2f</string>
 </resources>

@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import java.util.List;
 
 import cx.study.auction.bean.Commodity;
+import cx.study.auction.model.rest.http.MCException;
+import cx.study.auction.util.DateUtil;
 
 /**
  *
@@ -16,13 +18,12 @@ import cx.study.auction.bean.Commodity;
 
 public class Json2Commodity implements Json2Object<Commodity> {
     @Override
-    public Commodity json2Object(JSONObject jsonObject) throws Exception {
+    public Commodity json2Object(JSONObject jsonObject) throws MCException {
         if (jsonObject == null){
             return null;
         }
-        Commodity commodity = null;
+        Commodity commodity = new Commodity();
         try{
-            commodity = new Commodity();
             commodity.setId(jsonObject.optInt("id"));
             commodity.setCommodityName(jsonObject.optString("commodityName"));
             commodity.setTypeId(jsonObject.optInt("typeId"));
@@ -37,9 +38,8 @@ public class Json2Commodity implements Json2Object<Commodity> {
             commodity.setHammerPrice(jsonObject.optDouble("hammerPrice"));
             commodity.setBiddingDeposit(jsonObject.optDouble("biddingDeposit"));
             commodity.setStatus(jsonObject.optInt("status"));
-            //commodity.setStartTime((Date) jsonObject.opt("startTime"));
-            //new SimpleDateFormat().parse((String) jsonObject.opt("startTime"));
-           // commodity.setEndTime((Date) jsonObject.opt("endTime"));
+            commodity.setStartTime(DateUtil.getDateByString(jsonObject.optString("startTime")));
+            commodity.setEndTime(DateUtil.getDateByString(jsonObject.optString("endTime")));
             JSONArray jsonArray = jsonObject.optJSONArray("imageUrls");
             List<String> urls = Lists.newArrayList();
             for (int i = 0; i < jsonArray.length(); i ++){

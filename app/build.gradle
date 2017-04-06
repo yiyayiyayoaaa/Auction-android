@@ -1,0 +1,53 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "25.0.0"
+    defaultConfig {
+        applicationId "cx.study.auction"
+        minSdkVersion 17
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    //UI库
+    compile 'com.android.support:design:24.2.1'//包括了v4,v7,recycleView
+    compile 'com.jakewharton:butterknife:7.0.1'//UI注解库
+    compile 'com.beltaief.flowlayout:flowlayout:0.2.0'//控件状态维护
+    compile 'com.github.chrisbanes.photoview:library:1.2.4'//photoView
+    compile 'com.library.tangxiaolv:telegramgallery:1.0.2'//图库
+    compile 'com.yalantis:ucrop:2.2.0'//裁剪图片
+
+    //适配
+    compile 'com.anthonycr.grant:permissions:1.1.2'//6.0权限管理(提前预加)
+
+    //网络
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'//网络框架
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.picasso:picasso:2.5.2' //网络图片加载
+
+    //线程管理
+    compile 'org.greenrobot:eventbus:3.0.0'//事件总线
+    compile 'com.parse.bolts:bolts-android:1.4.0'//线程管理
+
+    //工具包
+    compile 'com.google.guava:guava:20.0'//google工具包
+    compile 'com.google.code.gson:gson:2.8.0'//gson工具包
+    testCompile 'junit:junit:4.12'
+
+}

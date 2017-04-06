@@ -11,13 +11,13 @@ import cx.study.auction.util.ActivityManager;
 
 public class MainApplication extends Application{
 
-    private MainApplication app;
+    private static MainApplication app;
 
-    public MainApplication getInstance(){
+    public static MainApplication getInstance(){
         return app;
     }
 
-    public void finishAll(){
+    public static void finishAll(){
         ActivityManager.getInstance().finishAll();
     }
 

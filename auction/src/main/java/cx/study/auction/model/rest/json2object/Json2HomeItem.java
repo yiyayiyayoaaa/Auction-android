@@ -6,6 +6,7 @@ import cx.study.auction.bean.Commodity;
 import cx.study.auction.bean.HomeContentItem;
 import cx.study.auction.bean.HomeItem;
 import cx.study.auction.bean.HomeTitleItem;
+import cx.study.auction.model.rest.http.MCException;
 
 /**
  *
@@ -14,7 +15,7 @@ import cx.study.auction.bean.HomeTitleItem;
 
 public class Json2HomeItem implements Json2Object<HomeItem>{
     @Override
-    public HomeItem json2Object(JSONObject jsonObject) throws Exception {
+    public HomeItem json2Object(JSONObject jsonObject) throws MCException {
         if (jsonObject == null){
             return null;
         }

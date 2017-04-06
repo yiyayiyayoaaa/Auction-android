@@ -33,10 +33,12 @@ import butterknife.ButterKnife;
 import cx.study.auction.R;
 import cx.study.auction.app.commodity.CommodityActivity;
 import cx.study.auction.bean.Commodity;
+import cx.study.auction.bean.Commodity.CommodityStatus;
 import cx.study.auction.bean.HomeItem;
 import cx.study.auction.contants.HttpRest;
 import cx.study.auction.event.ViewPagerChangeEvent;
 import cx.study.auction.model.rest.json2object.Json2HomeItem;
+import cx.study.auction.util.DateUtil;
 import cx.study.auction.util.MCProgress;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -68,6 +70,7 @@ public class HomeFragment extends Fragment{
 
     List<ImageView> viewList = Lists.newArrayList();
     HomeAdapter adapter;
+    ScheduledExecutorService executorService;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,7 +91,7 @@ public class HomeFragment extends Fragment{
                     @Override
                     public void accept(@NonNull List<HomeItem> homeItems) throws Exception {
                         MCProgress.dismiss();
-                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),8,GridLayoutManager.VERTICAL,false));
+                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),6,GridLayoutManager.VERTICAL,false));
                         adapter = new HomeAdapter(homeItems);
                         recyclerView.setAdapter(adapter);
                     }
@@ -101,29 +104,36 @@ public class HomeFragment extends Fragment{
         Log.d(TAG, "onViewPagerChange: " + event.currentItem);
         if (event.currentItem <viewList.size() -1){
             viewPager.setCurrentItem(event.currentItem + 1);
-        }
-        if (event.currentItem == viewList.size() -1){
+        } else if (event.currentItem == viewList.size() -1){
             viewPager.setCurrentItem(0,false);
         }
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+        if (executorService != null){
+            executorService.shutdown();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
+        if (executorService == null){
+            startViewPagerAuto();
+        }
     }
 
     private void initViewPager(){
+
         for (int i = 0; i < 5; i ++){
             ImageView view = (ImageView) LayoutInflater.from(getActivity()).inflate(R.layout.view_pager_item, null);
             Picasso.with(getActivity())
-                    .load("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png")
+                    .load(HttpRest.BASE_URL + "/file/9e979c9d4e3f40018a65d48c2a3590c1.jpg")
                     .into(view);
             viewList.add(view);
         }
@@ -149,8 +159,11 @@ public class HomeFragment extends Fragment{
                 container.removeView(viewList.get(position));
             }
         });
-        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(new Runnable() {
+
+    }
+    private void startViewPagerAuto(){
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
                 int currentItem = viewPager.getCurrentItem();
@@ -160,42 +173,6 @@ public class HomeFragment extends Fragment{
     }
 
     private List<HomeItem> loadData() throws Exception {
-       // List<HomeItem> homeItems = Lists.newArrayList();
-//        HomeItem<String> item1 = new HomeTitleItem();
-//        item1.setType(HomeItem.TITLE);
-//        item1.setObj("正在热拍");
-//        homeItems.add(item1);
-//        for (int i = 0; i < 8; i ++){
-//            HomeItem<Commodity> homeItem = new HomeContentItem();
-//            homeItem.setType(HomeItem.CONTENT);
-//            Commodity commodity = new Commodity();
-//            commodity.setCommodityName("Aaa aaa aaa" + i);
-//            List<String> imgUrls = new ArrayList<>();
-//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-//            commodity.setImageUrls(imgUrls);
-//            homeItem.setObj(commodity);
-//            homeItems.add(homeItem);
-//        }
-//        HomeItem<String> item2 = new HomeTitleItem();
-//        item2.setType(HomeItem.TITLE);
-//        item2.setObj("即将开始");
-//        homeItems.add(item2);
-//        for (int i = 0; i < 8; i ++){
-//            HomeItem<Commodity> homeItem = new HomeContentItem();
-//            homeItem.setType(HomeItem.CONTENT);
-//            Commodity commodity = new Commodity();
-//            commodity.setCommodityName("Bbb bbb bbb" + i);
-//            List<String> imgUrls = new ArrayList<>();
-//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-//            imgUrls.add("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/newmusic/img/default_8a5b42b2.png");
-//            commodity.setImageUrls(imgUrls);
-//            homeItem.setObj(commodity);
-//            homeItems.add(homeItem);
-//        }
-
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .get()
@@ -211,6 +188,7 @@ public class HomeFragment extends Fragment{
             HomeItem homeItem = new Json2HomeItem().json2Object(jsonArray.optJSONObject(i));
             homeItems.add(homeItem);
         }
+        Log.d(TAG, "loadData: " + homeItems.toString());
         return homeItems;
     }
 
@@ -238,6 +216,37 @@ public class HomeFragment extends Fragment{
             itemName = (TextView) itemView.findViewById(R.id.item_name);
             itemTextLeft = (TextView) itemView.findViewById(R.id.item_text_left);
             itemTextRight = (TextView) itemView.findViewById(R.id.item_text_right);
+        }
+
+        public void setViewValue(HomeItem item){
+            final Commodity commodity = (Commodity) item.getObj();
+            Integer status = commodity.getStatus();
+
+            String imageUrl = commodity.getImageUrls().get(0);
+            Log.d(TAG, "onBindViewHolder: " + imageUrl);
+            Picasso.with(getActivity())
+                    .load(HttpRest.SERVER_URL + imageUrl)
+                    //.resize(200,200)
+                    .into(itemImage);
+            switch (status){
+                case CommodityStatus.AUCTION:
+                    itemTextLeft.setText(DateUtil.getDateString(commodity.getEndTime()) + " 结束");
+                    break;
+                case CommodityStatus.WAIT_AUCTION:
+                    itemTextLeft.setText(DateUtil.getDateString(commodity.getStartTime()) + " 开始");
+                    break;
+            }
+            itemTextRight.setText("¥" + commodity.getStartingPrice()+"元");
+            itemName.setText(commodity.getCommodityName());
+            itemImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(),CommodityActivity.class);
+                    Log.d(TAG, "onClick: " + commodity.getId());
+                    intent.putExtra("id",commodity.getId());
+                    startActivity(intent);
+                }
+            });
         }
     }
 
@@ -275,23 +284,7 @@ public class HomeFragment extends Fragment{
                 case HomeItem.CONTENT:
                     HomeContentHolder contentHolder = (HomeContentHolder) holder;
                    // final HomeItem<Commodity> contentItem = (HomeContentItem)homeItem;
-                    final Commodity commodity = (Commodity) homeItem.getObj();
-                    String imageUrl = commodity.getImageUrls().get(0);
-                    Log.d(TAG, "onBindViewHolder: " + imageUrl);
-                    Picasso.with(getActivity())
-                            .load(HttpRest.SERVER_URL + imageUrl)
-                            .resize(100,200)
-                            .into(contentHolder.itemImage);
-                    contentHolder.itemName.setText(commodity.getCommodityName());
-
-                    contentHolder.itemImage.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(getActivity(),CommodityActivity.class);
-                            intent.putExtra("commodity",commodity);
-                            startActivity(intent);
-                        }
-                    });
+                    contentHolder.setViewValue(homeItem);
                     break;
             }
         }
@@ -318,7 +311,7 @@ public class HomeFragment extends Fragment{
                         int type = getItemViewType(position);
                         switch (type){
                             case HomeItem.TITLE:
-                                return 8;
+                                return 6;
                             case HomeItem.CONTENT:
                                 return 2;
                         }

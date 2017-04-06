@@ -29,6 +29,7 @@
                 android:lines="1"
                 android:padding="5dp"
                 />
+
             <TextView
                 android:id="@+id/starting_price"
                 android:background="@android:color/white"
@@ -40,6 +41,7 @@
                 android:layout_marginBottom="5dp"
                 android:padding="5dp"
                 />
+
             <TextView
                 android:id="@+id/appraised_price"
                 android:background="@android:color/white"
