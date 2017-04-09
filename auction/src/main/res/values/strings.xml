@@ -4,4 +4,11 @@
 
 
     <string name="start_price">起拍价:¥%1$.2f</string>
+    <string name="appraised_price">估价:¥%1$.2f</string>
+    <string name="bidding_deposit">保证金:¥%1$.2f</string>
+    <string name="reverse_price">保留价:¥%1$.2f</string>
+    <string name="bid_increments">竞价增幅:¥%1$.2f</string>
+    <string name="customer">商品归属单位或个人:%1$s</string>
+    <string name="start_time">距离开始还有%1$d天%2$d小时%3$d分钟%4$d秒</string>
+    <string name="end_time">距离结束还有%1$d天%2$d小时%3$d分钟%4$d秒</string>
 </resources>

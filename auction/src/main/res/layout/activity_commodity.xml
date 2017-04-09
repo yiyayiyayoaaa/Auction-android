@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -128,7 +131,9 @@
                 android:background="@android:color/white"
                 android:id="@+id/commodity_description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                tools:text="dasdasdasdasdasdadasdasda"
+                >
 
             </TextView>
         </LinearLayout>
@@ -137,30 +142,21 @@
     <LinearLayout
         android:background="@android:color/white"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
-       <TextView
-           android:id="@+id/time"
-           android:layout_weight="0.6"
-           android:layout_width="0dp"
-           android:layout_height="match_parent"
-           android:gravity="center|start"
-           android:text="开始时间:2017-02-02 10:30:00"
-           android:textColor="@android:color/holo_red_dark"
-           android:textSize="16sp"
-           android:padding="5dp"
-           />
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
 
-        <EditText
-            android:layout_weight="0.2"
+        <TextView
+            android:id="@+id/time"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:lines="1"
-            android:inputType="numberDecimal"
-            android:id="@+id/et_price"
-            android:hint=""
-            />
+            android:layout_weight="0.6"
+            android:gravity="center|start"
+            android:padding="5dp"
+            android:text="距离开始还有3小时23分钟23秒"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/btn_bid"

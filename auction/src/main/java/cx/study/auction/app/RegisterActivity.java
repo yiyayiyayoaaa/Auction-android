@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.EditText;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.ref.WeakReference;
 import java.util.concurrent.Callable;
 
@@ -20,6 +22,7 @@ import cx.study.auction.R;
 import cx.study.auction.app.base.BaseActivity;
 import cx.study.auction.app.home.HomeActivity;
 import cx.study.auction.bean.User;
+import cx.study.auction.event.RegisterEvent;
 import cx.study.auction.model.rest.UserRest;
 import cx.study.auction.model.rest.http.MCException;
 
@@ -44,8 +47,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null){
             actionBar.show();
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(false);
         }
         userRest = new UserRest();
     }
@@ -75,8 +76,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public Object then(Task<User> task) throws Exception {
-                Intent intent = new Intent(ref.get(), HomeActivity.class);
-                startActivity(intent);
+                if (!task.isFaulted()){
+                    Intent intent = new Intent(ref.get(), HomeActivity.class);
+                    startActivity(intent);
+                    EventBus.getDefault().post(new RegisterEvent());
+                } else {
+                    Exception error = task.getError();
+                    error.printStackTrace();
+                }
                 return null;
             }
         });

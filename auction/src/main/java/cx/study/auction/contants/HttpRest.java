@@ -6,7 +6,7 @@ package cx.study.auction.contants;
  */
 
 public interface HttpRest {
-    String SERVER_URL = "http://192.168.0.107:8080/";
+    String SERVER_URL = "http://192.168.1.106:8080/";
     String BASE_URL = SERVER_URL;
     String HOME_PAGE_REST = BASE_URL + "rest/homeInfo.do";
 
