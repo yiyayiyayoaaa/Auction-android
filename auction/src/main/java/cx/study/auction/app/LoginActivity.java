@@ -2,7 +2,6 @@ package cx.study.auction.app;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -26,8 +25,8 @@ import cx.study.auction.app.base.BaseActivity;
 import cx.study.auction.app.home.HomeActivity;
 import cx.study.auction.bean.User;
 import cx.study.auction.event.RegisterEvent;
+import cx.study.auction.model.dao.UserDao;
 import cx.study.auction.model.rest.UserRest;
-import cx.study.auction.util.SharedPreferencesUtil;
 
 /**
  *
@@ -41,6 +40,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     EditText etPassword;
 
     private UserRest userRest;
+    private UserDao userDao;
+    private boolean isGoHome = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +49,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         userRest = new UserRest();
+        userDao = new UserDao(this);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null){
             actionBar.show();
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+        Intent intent = getIntent();
+        if (intent != null){
+            isGoHome = intent.getBooleanExtra("isGoHome",true);
+            if (!isGoHome){
+                if (actionBar != null){
+                    actionBar.show();
+                    actionBar.setHomeButtonEnabled(true);
+                    actionBar.setDisplayHomeAsUpEnabled(true);
+                }
+            }
         }
     }
 
@@ -82,8 +95,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public Object then(Task<User> task) throws Exception {
                 if (!task.isFaulted() && task.getResult() != null){
-                    Intent intent = new Intent(ref.get(), HomeActivity.class);
-                    startActivity(intent);
+                    if (isGoHome){
+                        Intent intent = new Intent(ref.get(), HomeActivity.class);
+                        startActivity(intent);
+                    }
+                    User user = task.getResult();
+                    if (Double.isNaN(user.getAccount())){
+                        user.setAccount(0d);
+                    }
+                    userDao.saveUser(user);
                     finish();
                 } else {
                     Exception error = task.getError();

@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cx.study.auction.model.rest.http.MCException;
 import cx.study.auction.model.rest.json2object.Json2Object;
 
 
@@ -25,7 +26,7 @@ public abstract class AbstractRest {
 	 * @throws Exception
 	 */
 	@Nullable
-	public static <T> List<T> getListFromData(String data, Json2Object<T> json2Object) throws Exception {
+	public static <T> List<T> getListFromData(String data, Json2Object<T> json2Object) throws MCException {
 		if (TextUtils.isEmpty(data)) {
 			return null;
 		}
@@ -48,7 +49,7 @@ public abstract class AbstractRest {
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
-			throw new Exception(e);
+			throw new MCException(e);
 		}
 	}
 }

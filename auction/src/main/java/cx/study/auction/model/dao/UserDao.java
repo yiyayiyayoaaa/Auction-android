@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import org.json.JSONException;
+import com.google.gson.Gson;
+
 import org.json.JSONObject;
 
 import cx.study.auction.BuildConfig;
 import cx.study.auction.bean.User;
-import cx.study.auction.model.rest.http.MCException;
 import cx.study.auction.model.rest.json2object.Json2User;
 
 /**
@@ -26,10 +26,11 @@ public class UserDao {
 
     /**
      * 保存用户信息到本地
-     * @param json json
+     * @param user user
      */
-    public void saveUser(String json){
-        spf.edit().putString(USER,json).apply();
+    public void saveUser(User user){
+        Gson gson = new Gson();
+        spf.edit().putString(USER,gson.toJson(user)).apply();
     }
 
     /**

@@ -1,8 +1,14 @@
 package cx.study.auction.app.commodity;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,23 +18,33 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.common.collect.Lists;
 import com.squareup.picasso.Picasso;
 
+import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import bolts.Continuation;
+import bolts.Task;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cx.study.auction.R;
+import cx.study.auction.app.LoginActivity;
 import cx.study.auction.app.base.BaseActivity;
+import cx.study.auction.bean.BidRecord;
 import cx.study.auction.bean.Commodity;
 import cx.study.auction.bean.Commodity.CommodityStatus;
+import cx.study.auction.bean.User;
 import cx.study.auction.contants.HttpRest;
+import cx.study.auction.model.dao.UserDao;
 import cx.study.auction.model.rest.CommodityRest;
 import cx.study.auction.model.rest.http.MCException;
 import io.reactivex.Observable;
@@ -44,7 +60,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by cheng.xiao on 2017/3/10.
  */
 
-public class CommodityActivity extends BaseActivity{
+public class CommodityActivity extends BaseActivity implements View.OnClickListener{
     @Bind(R.id.view_pager)
     ViewPager viewPager;
     @Bind(R.id.commodity_name)
@@ -70,7 +86,9 @@ public class CommodityActivity extends BaseActivity{
     @Bind(R.id.btn_bid)
     Button btnBid;
     CommodityRest commodityRest;
+    UserDao userDao;
     private Commodity commodity;
+    User user;
     private List<ImageView> viewList = Lists.newArrayList();
     private ScheduledExecutorService service;
     @Override
@@ -94,6 +112,8 @@ public class CommodityActivity extends BaseActivity{
     }
 
     private void init(){
+        userDao = new UserDao(this);
+        user = userDao.getLocalUser();
         commodityRest = new CommodityRest();
         final int commodityId = getIntent().getIntExtra("id",0);
         Observable.create(new ObservableOnSubscribe<Commodity>() {
@@ -249,5 +269,127 @@ public class CommodityActivity extends BaseActivity{
         i[2] = (int) ((time - i[0] * d - i[1] * h) /m);
         i[3] = (int) ((time - i[0] * d - i[1] * h - i[2] * m) / s);
         return i;
+    }
+
+    @Override
+    @OnClick({R.id.btn_bid})
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_bid:
+                //判断是否登录
+                if(user!= null) {
+                    refreshCommodity().onSuccess(new Continuation<Commodity, Object>() {
+                        @Override
+                        public Object then(Task<Commodity> task) throws Exception {
+                            commodity = task.getResult();
+                            bidPrice();
+                            return null;
+                        }
+                    },Task.UI_THREAD_EXECUTOR);
+                } else {
+                    Toast.makeText(this,"请先登录",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent.putExtra("isGoHome",false);
+                    startActivity(intent);
+                }
+                break;
+            default:
+
+        }
+    }
+
+    private void bidPrice(){
+        final WeakReference<Activity> ref = new WeakReference<Activity>(this);
+        final double b;
+        double hammerPrice = commodity.getHammerPrice();//当前价
+        if (Double.isNaN(hammerPrice)){
+            hammerPrice = 0d;
+        }
+        double startingPrice = commodity.getStartingPrice(); //起始价
+        double bidIncrements = commodity.getBidIncrements();//出价增幅
+        if (startingPrice > hammerPrice){
+            b = startingPrice;
+        } else {
+            b = hammerPrice + bidIncrements;
+        }
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("请输入您的出价");
+        View view = LayoutInflater.from(this).inflate(R.layout.layout_dialog_bid_price, null);
+        final EditText editText = (EditText) view.findViewById(R.id.et_bid_price);
+        Log.e(TAG, "onClick: " + b);
+        editText.setHint("当前出价不能低于" + b + "元");
+        builder.setView(view);
+        builder.setCancelable(false);
+        builder.setPositiveButton("确定",null);
+        builder.setNegativeButton("取消",null);
+        final AlertDialog dialog = builder.show();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = editText.getText().toString();
+                if (!TextUtils.isEmpty(text) && Double.parseDouble(text)>= b){
+                    BidRecord record = new BidRecord(commodity.getId(),user.getId(), Double.parseDouble(text));
+                    postBidPrice(record,ref.get());
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(ref.get(),"请输入正确的出价",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * 请求出价记录
+     * @return
+     */
+    private Task<List<BidRecord>> getBidRecords(){
+        return Task.call(new Callable<List<BidRecord>>() {
+            @Override
+            public List<BidRecord> call() throws Exception {
+                return commodityRest.getBidRecords(commodity.getId());
+            }
+        },Task.BACKGROUND_EXECUTOR).continueWith(new Continuation<List<BidRecord>, List<BidRecord>>() {
+            @Override
+            public List<BidRecord> then(Task<List<BidRecord>> task) throws Exception {
+                if (!task.isFaulted()){
+                    //刷新ui
+                } else {
+                    //错误信息
+                }
+                return null;
+            }
+        },Task.UI_THREAD_EXECUTOR);
+    }
+
+    /**
+     * 发送价格
+     * @return
+     */
+    private Task<String> postBidPrice(final BidRecord bidRecord, final Context context){
+        return Task.call(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return commodityRest.postBidPrice(bidRecord);
+            }
+        },Task.BACKGROUND_EXECUTOR).continueWith(new Continuation<String, String>() {
+            @Override
+            public String then(Task<String> task) throws Exception {
+                if (!task.isFaulted()){
+                    Toast.makeText(context,task.getResult(),Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(context,task.getError().getMessage(),Toast.LENGTH_SHORT).show();
+                }
+                return null;
+            }
+        },Task.UI_THREAD_EXECUTOR);
+    }
+
+    private Task<Commodity> refreshCommodity(){
+        return Task.callInBackground(new Callable<Commodity>() {
+            @Override
+            public Commodity call() throws Exception {
+                return commodityRest.getCommodityById(commodity.getId());
+            }
+        });
     }
 }
