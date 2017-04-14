@@ -25,4 +25,9 @@ public class DateUtil {
         SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm", Locale.CHINESE);
         return format.format(date);
     }
+
+    public static String getDateTimeString(Date date){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE);
+        return format.format(date);
+    }
 }

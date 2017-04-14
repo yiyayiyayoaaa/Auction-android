@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+    <TextView
+        android:id="@+id/tv_id"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        tools:text="1"
+        />
+    <TextView
+        android:id="@+id/tv_bid_price"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        tools:text="1800"
+        />
+    <TextView
+        android:id="@+id/tv_bid_time"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        tools:text="2016-10-12 12:12:12"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_isMe"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        tools:text="1800"
+        android:layout_height="wrap_content" />
+</LinearLayout>

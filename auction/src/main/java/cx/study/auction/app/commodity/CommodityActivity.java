@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -85,10 +86,14 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     TextView tvTime;
     @Bind(R.id.btn_bid)
     Button btnBid;
+    @Bind(R.id.tv_bid_count)
+    TextView tvBidCount;
     CommodityRest commodityRest;
     UserDao userDao;
     private Commodity commodity;
     User user;
+    BidRecordAdapter adapter;
+    List<BidRecord> records = Lists.newArrayList();
     private List<ImageView> viewList = Lists.newArrayList();
     private ScheduledExecutorService service;
     @Override
@@ -97,10 +102,11 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
         setContentView(R.layout.activity_commodity);
         ButterKnife.bind(this);
         setTitle("商品详情");
-        init();
+
     }
 
     private void initView() {
+        getBidRecords(this);
         commodityName.setText(commodity.getCommodityName());
         staringPrice.setText(getString(R.string.start_price,commodity.getStartingPrice()));
         appraisedPrice.setText(getString(R.string.appraised_price,commodity.getAppraisedPrice()));
@@ -110,11 +116,12 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
         tvCustomer.setText(getString(R.string.customer,commodity.getCustomerName()));
 
     }
-
     private void init(){
         userDao = new UserDao(this);
         user = userDao.getLocalUser();
         commodityRest = new CommodityRest();
+        adapter = new BidRecordAdapter(this,records,user==null?-1:user.getId());
+        bidRecord.setAdapter(adapter);
         final int commodityId = getIntent().getIntExtra("id",0);
         Observable.create(new ObservableOnSubscribe<Commodity>() {
 
@@ -252,9 +259,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        if (commodity != null){
-            showTime();
-        }
+        init();
     }
 
 
@@ -342,7 +347,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
      * 请求出价记录
      * @return
      */
-    private Task<List<BidRecord>> getBidRecords(){
+    private Task<List<BidRecord>> getBidRecords(final Context context){
         return Task.call(new Callable<List<BidRecord>>() {
             @Override
             public List<BidRecord> call() throws Exception {
@@ -353,8 +358,13 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
             public List<BidRecord> then(Task<List<BidRecord>> task) throws Exception {
                 if (!task.isFaulted()){
                     //刷新ui
+                    records.clear();
+                    records.addAll(task.getResult());
+                    tvBidCount.setText(String.format(Locale.getDefault(),"该商品已出价%d次",records.size()));
+                    adapter.notifyDataSetChanged();
                 } else {
                     //错误信息
+                    Toast.makeText(context,task.getError().getMessage(),Toast.LENGTH_SHORT).show();
                 }
                 return null;
             }
@@ -376,9 +386,11 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
             public String then(Task<String> task) throws Exception {
                 if (!task.isFaulted()){
                     Toast.makeText(context,task.getResult(),Toast.LENGTH_SHORT).show();
+
                 }else{
                     Toast.makeText(context,task.getError().getMessage(),Toast.LENGTH_SHORT).show();
                 }
+                getBidRecords(context);
                 return null;
             }
         },Task.UI_THREAD_EXECUTOR);

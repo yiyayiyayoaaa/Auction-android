@@ -39,8 +39,8 @@ public class CommodityRest extends AbstractRest{
 
     public List<BidRecord> getBidRecords(int id) throws MCException {
         Map<String, Object> jsonObj = Maps.newHashMap();
-        jsonObj.put("id", id);
-        HttpResult response = HttpClient.doJSONPost(HttpRest.QUERY_COMMODITY_BY_ID_REST,jsonObj);
+        jsonObj.put("commodityId", id);
+        HttpResult response = HttpClient.doJSONPost(HttpRest.BID_RECORDS_REST,jsonObj);
         return getListFromData(response.string(),new Json2BidRecord());
     }
 }
