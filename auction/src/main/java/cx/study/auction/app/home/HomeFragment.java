@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,13 +22,15 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONArray;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import bolts.Continuation;
+import bolts.Task;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cx.study.auction.R;
@@ -37,19 +40,8 @@ import cx.study.auction.bean.Commodity.CommodityStatus;
 import cx.study.auction.bean.HomeItem;
 import cx.study.auction.contants.HttpRest;
 import cx.study.auction.event.ViewPagerChangeEvent;
-import cx.study.auction.model.rest.json2object.Json2HomeItem;
+import cx.study.auction.model.rest.HomeRest;
 import cx.study.auction.util.DateUtil;
-import cx.study.auction.util.MCProgress;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import static org.greenrobot.eventbus.EventBus.TAG;
 
@@ -58,11 +50,13 @@ import static org.greenrobot.eventbus.EventBus.TAG;
  * Created by cheng.xiao on 2017/3/9.
  */
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     public static Fragment getInstance(){
         return new HomeFragment();
     }
+    @Bind(R.id.swipe)
+    SwipeRefreshLayout swipe;
     @Bind(R.id.view_pager)
     ViewPager viewPager;
     @Bind(R.id.home_recycle_view)
@@ -70,32 +64,30 @@ public class HomeFragment extends Fragment{
 
     List<ImageView> viewList = Lists.newArrayList();
     HomeAdapter adapter;
+    HomeRest homeRest;
     ScheduledExecutorService executorService;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        homeRest = new HomeRest();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,null);
         ButterKnife.bind(this,view);
+        swipe.setOnRefreshListener(this);
         initViewPager();
-
-        Observable.create(new ObservableOnSubscribe<List<HomeItem>>() {
-
+        //loadData();
+        swipe.post(new Runnable() {
             @Override
-            public void subscribe(ObservableEmitter<List<HomeItem>> e) throws Exception {
-                MCProgress.show("正在加载",getActivity());
-                e.onNext(loadData());
+            public void run() {
+                swipe.setRefreshing(true);
+                loadData();
             }
-        }).subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<HomeItem>>() {
-                    @Override
-                    public void accept(@NonNull List<HomeItem> homeItems) throws Exception {
-                        MCProgress.dismiss();
-                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),6,GridLayoutManager.VERTICAL,false));
-                        adapter = new HomeAdapter(homeItems);
-                        recyclerView.setAdapter(adapter);
-                    }
-                });
+        });
         return view;
     }
 
@@ -129,7 +121,6 @@ public class HomeFragment extends Fragment{
     }
 
     private void initViewPager(){
-
         for (int i = 0; i < 5; i ++){
             ImageView view = (ImageView) LayoutInflater.from(getActivity()).inflate(R.layout.view_pager_item, null);
             Picasso.with(getActivity())
@@ -172,24 +163,34 @@ public class HomeFragment extends Fragment{
         },10,10, TimeUnit.SECONDS);
     }
 
-    private List<HomeItem> loadData() throws Exception {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .get()
-                .url(HttpRest.HOME_PAGE_REST)
-                .build();
-        Response response = okHttpClient.newCall(request).execute();
-        String json = response.body().string();
-//        List<HomeItem> homeItems = new Gson().fromJson(json, new TypeToken<List<HomeItem>>() {
-//                        }.getType());
-        List<HomeItem> homeItems = Lists.newArrayList();
-        JSONArray jsonArray = new JSONArray(json);
-        for (int i = 0; i < jsonArray.length(); i ++){
-            HomeItem homeItem = new Json2HomeItem().json2Object(jsonArray.optJSONObject(i));
-            homeItems.add(homeItem);
-        }
-        Log.d(TAG, "loadData: " + homeItems.toString());
-        return homeItems;
+    private Task<List<HomeItem>> loadData() {
+        return Task.callInBackground(new Callable<List<HomeItem>>() {
+            @Override
+            public List<HomeItem> call() throws Exception {
+                return homeRest.getHomeInfo();
+            }
+        }).continueWith(new Continuation<List<HomeItem>, List<HomeItem>>() {
+            @Override
+            public List<HomeItem> then(Task<List<HomeItem>> task) throws Exception {
+                swipe.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipe.setRefreshing(false);
+                    }
+                });
+                if (!task.isFaulted()){
+                    adapter = new HomeAdapter(task.getResult());
+                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(),6,GridLayoutManager.VERTICAL,false));
+                    recyclerView.setAdapter(adapter);
+                }
+                return null;
+            }
+        },Task.UI_THREAD_EXECUTOR);
+    }
+
+    @Override
+    public void onRefresh() {
+        loadData();
     }
 
 

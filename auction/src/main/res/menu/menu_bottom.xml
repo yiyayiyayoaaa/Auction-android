@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/homePage"
+        android:enabled="true"
         android:title="@string/home"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_home"
+        app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/type"
-        android:title="@string/home"
-        android:icon="@mipmap/ic_launcher"
+        android:enabled="true"
+        android:title="分类"
+        android:icon="@drawable/icon_type"
+        app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/auction"
-        android:title="@string/home"
-        android:icon="@mipmap/ic_launcher"
+        android:enabled="true"
+        android:title="拍卖"
+        android:icon="@drawable/icon_auction"
+        app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/user"
-        android:title="@string/home"
-        android:icon="@mipmap/ic_launcher"
+        android:enabled="true"
+        android:title="我"
+        android:icon="@drawable/icon_me"
+        app:showAsAction="ifRoom"
         />
 </menu>

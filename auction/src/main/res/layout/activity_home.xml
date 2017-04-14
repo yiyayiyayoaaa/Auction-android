@@ -28,8 +28,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/white"
         app:menu="@menu/menu_bottom"
+        />
 
-        >
-
-    </android.support.design.widget.BottomNavigationView>
 </LinearLayout>
