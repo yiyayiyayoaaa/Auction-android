@@ -99,10 +99,9 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_commodity);
+        super.setContentView(R.layout.activity_commodity);
         ButterKnife.bind(this);
         setTitle("商品详情");
-
     }
 
     private void initView() {
@@ -201,6 +200,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                                 @Override
                                 public void run() {
                                     tvTime.setText(content);
+                                    btnBid.setVisibility(View.VISIBLE);
                                 }
                             });
                         } else {
@@ -210,7 +210,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                                 @Override
                                 public void run() {
                                     tvTime.setText("结束");
-                                    btnBid.setClickable(false);
+                                    btnBid.setVisibility(View.GONE);
                                 }
                             });
                         }
@@ -232,6 +232,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                                 @Override
                                 public void run() {
                                     tvTime.setText(content);
+                                    btnBid.setVisibility(View.GONE);
                                 }
                             });
                         } else {

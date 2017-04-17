@@ -85,36 +85,40 @@
             >
             <TextView
                 android:id="@+id/btn_wait_pay"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@drawable/icon_wait_pay"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:padding="10dp"
                 android:layout_height="wrap_content"
                 android:text="待付款"
                 />
             <TextView
                 android:id="@+id/btn_wait_send"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@drawable/icon_wait_send"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:padding="10dp"
                 android:layout_height="wrap_content"
                 android:text="待发货"/>
             <TextView
                 android:id="@+id/btn_wait_received"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@drawable/icon_wait_received"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:padding="10dp"
                 android:layout_height="wrap_content"
                 android:text="待收货"
                 />
             <TextView
                 android:id="@+id/btn_address_manager"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@drawable/icon_address"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:padding="10dp"
                 android:layout_height="wrap_content"
                 android:text="地址管理"
                 />
@@ -141,19 +145,21 @@
             >
             <TextView
                 android:id="@+id/btn_account"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@drawable/icon_account"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:padding="10dp"
                 android:layout_height="wrap_content"
                 android:text="余额:¥1000.00"
                 />
             <TextView
                 android:id="@+id/btn_recharge"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@drawable/icon_recharge"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:padding="10dp"
                 android:layout_height="wrap_content"
                 android:text="充值"
                 />
