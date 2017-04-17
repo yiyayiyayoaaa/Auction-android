@@ -11,4 +11,5 @@
     <string name="customer">商品归属单位或个人:%1$s</string>
     <string name="start_time">距离开始还有%1$d天%2$d小时%3$d分钟%4$d秒</string>
     <string name="end_time">距离结束还有%1$d天%2$d小时%3$d分钟%4$d秒</string>
+    <string name="search">搜索</string>
 </resources>

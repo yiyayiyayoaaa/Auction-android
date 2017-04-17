@@ -237,7 +237,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     itemTextLeft.setText(DateUtil.getDateString(commodity.getStartTime()) + " 开始");
                     break;
             }
-            itemTextRight.setText("¥" + commodity.getStartingPrice()+"元");
+            itemTextRight.setText("起拍价：¥" + commodity.getStartingPrice()+"元");
             itemName.setText(commodity.getCommodityName());
             itemImage.setOnClickListener(new View.OnClickListener() {
                 @Override

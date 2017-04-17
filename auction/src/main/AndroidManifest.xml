@@ -21,6 +21,7 @@
         <activity android:name=".app.commodity.CommodityActivity"/>
         <activity android:name=".app.LoginActivity"/>
         <activity android:name=".app.RegisterActivity"/>
+        <activity android:name=".app.home.SearchActivity"/>
     </application>
 
 </manifest>

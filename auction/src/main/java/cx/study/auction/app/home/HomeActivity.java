@@ -1,5 +1,6 @@
 package cx.study.auction.app.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,10 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cx.study.auction.R;
 import cx.study.auction.app.auction.AuctionFragment;
 import cx.study.auction.app.base.BaseActivity;
@@ -25,6 +29,8 @@ public class HomeActivity extends BaseActivity {
     FrameLayout frameLayout;
     @Bind(R.id.bnv_bottom_menu)
     BottomNavigationView bottomMenu;
+    @Bind(R.id.tv_search)
+    TextView tv_search;
 
     Fragment homeFragment;
     Fragment typeFragment;
@@ -57,6 +63,7 @@ public class HomeActivity extends BaseActivity {
                 hideAllFragment(transaction);
                 switch (item.getItemId()){
                     case R.id.homePage:
+                        tv_search.setVisibility(View.VISIBLE);
                         if (homeFragment == null){
                             homeFragment = HomeFragment.getInstance();
                             transaction.add(R.id.fragment_container,homeFragment);
@@ -65,6 +72,7 @@ public class HomeActivity extends BaseActivity {
                         }
                         break;
                     case R.id.type:
+                        tv_search.setVisibility(View.VISIBLE);
                         if (typeFragment == null){
                             typeFragment = TypeFragment.getInstance();
                             transaction.add(R.id.fragment_container,typeFragment);
@@ -73,6 +81,7 @@ public class HomeActivity extends BaseActivity {
                         }
                         break;
                     case R.id.auction:
+                        tv_search.setVisibility(View.GONE);
                         if (auctionFragment == null){
                             auctionFragment = AuctionFragment.getInstance();
                             transaction.add(R.id.fragment_container,auctionFragment);
@@ -81,6 +90,7 @@ public class HomeActivity extends BaseActivity {
                         }
                         break;
                     case R.id.user:
+                        tv_search.setVisibility(View.GONE);
                         if (userFragment == null){
                             userFragment = UserFragment.getInstance();
                             transaction.add(R.id.fragment_container,userFragment);
@@ -109,6 +119,13 @@ public class HomeActivity extends BaseActivity {
             transaction.hide(userFragment);
         }
     }
+
+    @OnClick(R.id.tv_search)
+    public void search(TextView textView){
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
+    }
+
 
 
 }

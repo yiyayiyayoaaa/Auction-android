@@ -54,24 +54,14 @@ public class CommodityRest extends AbstractRest{
     }
 
     /**
-     *  正在拍卖  即将开始  分页
+     *
      * @return
      * @throws MCException
      */
-    public List<Commodity> getCommodityByState() throws MCException {
+    public List<Commodity> getCommodities(int id) throws MCException {
         Map<String, Object> jsonObj = Maps.newHashMap();
-        HttpResult response = HttpClient.doJSONPost(HttpRest.BID_RECORDS_REST,jsonObj);
-        return getListFromData(response.string(),new Json2Commodity());
-    }
-
-    /**
-     * 分类
-     * @return
-     * @throws MCException
-     */
-    public List<Commodity> getCommodityByType() throws MCException {
-        Map<String, Object> jsonObj = Maps.newHashMap();
-        HttpResult response = HttpClient.doJSONPost(HttpRest.BID_RECORDS_REST,jsonObj);
+        jsonObj.put("id",id);
+        HttpResult response = HttpClient.doJSONPost(HttpRest.COMMODITIES,jsonObj);
         return getListFromData(response.string(),new Json2Commodity());
     }
 }

@@ -3,13 +3,13 @@ package cx.study.auction.app.type;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cx.study.auction.R;
 import cx.study.auction.app.base.BaseFragment;
+import cx.study.auction.app.commodity.CommodityListFragment;
 import cx.study.auction.bean.Commodity;
 import cx.study.auction.bean.CommodityType;
 import cx.study.auction.model.rest.CommodityRest;
@@ -31,11 +32,11 @@ import cx.study.auction.model.rest.CommodityRest;
  */
 
 public class TypeFragment extends BaseFragment{
-    @Bind(R.id.recycle_view)
-    RecyclerView recyclerView;
+    @Bind(R.id.fragment_container)
+    FrameLayout frameLayout;
     @Bind(R.id.rv_type)
     RecyclerView rvType;
-
+    CommodityListFragment commodityListFragment;
     List<CommodityType> typeList = new ArrayList<>();
     List<Commodity> commodityList = new ArrayList<>();
     CommodityRest commodityRest;
@@ -81,11 +82,25 @@ public class TypeFragment extends BaseFragment{
             public void onItemClick(View view, CommodityType type) {
                 if (!type.isSelect()){
                     typeAdapter.changeState(type);
+                    loadData(type.getId());
                 }
             }
         });
         rvType.setAdapter(typeAdapter);
+        initFrameLayout();
         return view;
+    }
+
+    private void initFrameLayout(){
+        FragmentManager fm = getChildFragmentManager();
+        commodityListFragment = (CommodityListFragment) fm.findFragmentById(R.id.fragment_container);
+        if (commodityListFragment == null){
+            commodityListFragment = CommodityListFragment.getInstance();
+            fm.beginTransaction()
+                    .add(R.id.fragment_container,commodityListFragment)
+                    .commit();
+        }
+        loadData(-1);
     }
 
     @Override
@@ -93,6 +108,7 @@ public class TypeFragment extends BaseFragment{
         super.onHiddenChanged(hidden);
         if (!hidden){
             initType();
+            loadData(-1);
         }
     }
 
@@ -111,13 +127,21 @@ public class TypeFragment extends BaseFragment{
         });
     }
 
-    private Task<List<Commodity>> loadDate(){
+    private Task<List<Commodity>> loadData(final int typeId){
         return Task.callInBackground(new Callable<List<Commodity>>() {
             @Override
             public List<Commodity> call() throws Exception {
+                return commodityRest.getCommodities(typeId);
+            }
+        }).continueWith(new Continuation<List<Commodity>, List<Commodity>>() {
+            @Override
+            public List<Commodity> then(Task<List<Commodity>> task) throws Exception {
+                if (!task.isFaulted()){
+                    commodityListFragment.setCommodityList(task.getResult());
+                }
                 return null;
             }
-        });
+        },Task.UI_THREAD_EXECUTOR);
     }
 
     @Override
