@@ -7,12 +7,14 @@ import java.util.Map;
 
 import cx.study.auction.bean.BidRecord;
 import cx.study.auction.bean.Commodity;
+import cx.study.auction.bean.CommodityType;
 import cx.study.auction.contants.HttpRest;
 import cx.study.auction.model.rest.http.HttpClient;
 import cx.study.auction.model.rest.http.HttpResult;
 import cx.study.auction.model.rest.http.MCException;
 import cx.study.auction.model.rest.json2object.Json2BidRecord;
 import cx.study.auction.model.rest.json2object.Json2Commodity;
+import cx.study.auction.model.rest.json2object.Json2CommodityType;
 
 /**
  *
@@ -42,5 +44,34 @@ public class CommodityRest extends AbstractRest{
         jsonObj.put("commodityId", id);
         HttpResult response = HttpClient.doJSONPost(HttpRest.BID_RECORDS_REST,jsonObj);
         return getListFromData(response.string(),new Json2BidRecord());
+    }
+
+    public List<CommodityType> getCommodityType() throws MCException {
+        Map<String, Object> jsonObj = Maps.newHashMap();
+        jsonObj.put("id",1);
+        HttpResult response = HttpClient.doJSONPost(HttpRest.COMMODITY_TYPE,jsonObj);
+        return getListFromData(response.string(),new Json2CommodityType());
+    }
+
+    /**
+     *  正在拍卖  即将开始  分页
+     * @return
+     * @throws MCException
+     */
+    public List<Commodity> getCommodityByState() throws MCException {
+        Map<String, Object> jsonObj = Maps.newHashMap();
+        HttpResult response = HttpClient.doJSONPost(HttpRest.BID_RECORDS_REST,jsonObj);
+        return getListFromData(response.string(),new Json2Commodity());
+    }
+
+    /**
+     * 分类
+     * @return
+     * @throws MCException
+     */
+    public List<Commodity> getCommodityByType() throws MCException {
+        Map<String, Object> jsonObj = Maps.newHashMap();
+        HttpResult response = HttpClient.doJSONPost(HttpRest.BID_RECORDS_REST,jsonObj);
+        return getListFromData(response.string(),new Json2Commodity());
     }
 }
