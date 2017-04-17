@@ -88,6 +88,8 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     Button btnBid;
     @Bind(R.id.tv_bid_count)
     TextView tvBidCount;
+    @Bind(R.id.btn_back)
+    ImageView btnBack;
     CommodityRest commodityRest;
     UserDao userDao;
     private Commodity commodity;
@@ -102,6 +104,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
         super.setContentView(R.layout.activity_commodity);
         ButterKnife.bind(this);
         setTitle("商品详情");
+        getSupportActionBar().hide();
     }
 
     private void initView() {
@@ -278,7 +281,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    @OnClick({R.id.btn_bid})
+    @OnClick({R.id.btn_bid,R.id.btn_back})
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_bid:
@@ -299,6 +302,8 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                     startActivity(intent);
                 }
                 break;
+            case R.id.btn_back:
+                finish();
             default:
 
         }

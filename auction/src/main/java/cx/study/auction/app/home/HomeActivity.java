@@ -36,17 +36,29 @@ public class HomeActivity extends BaseActivity {
     Fragment typeFragment;
     Fragment userFragment;
     Fragment auctionFragment;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        ButterKnife.bind(this);
+
+    private void initHomeToolBar(){
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
             setSupportActionBar(toolbar);
             toolbar.setTitle(getTitle());
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
+    }
+
+    private void initOtherToolBar(){
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+            initToolbar();
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
+        initHomeToolBar();
         final FragmentManager fm = getSupportFragmentManager();
 
         homeFragment = fm.findFragmentById(R.id.fragment_container);
@@ -63,6 +75,7 @@ public class HomeActivity extends BaseActivity {
                 hideAllFragment(transaction);
                 switch (item.getItemId()){
                     case R.id.homePage:
+                        initHomeToolBar();
                         tv_search.setVisibility(View.VISIBLE);
                         if (homeFragment == null){
                             homeFragment = HomeFragment.getInstance();
@@ -72,6 +85,7 @@ public class HomeActivity extends BaseActivity {
                         }
                         break;
                     case R.id.type:
+                        initHomeToolBar();
                         tv_search.setVisibility(View.VISIBLE);
                         if (typeFragment == null){
                             typeFragment = TypeFragment.getInstance();
@@ -81,6 +95,7 @@ public class HomeActivity extends BaseActivity {
                         }
                         break;
                     case R.id.auction:
+                        initOtherToolBar();
                         tv_search.setVisibility(View.GONE);
                         if (auctionFragment == null){
                             auctionFragment = AuctionFragment.getInstance();
@@ -90,6 +105,7 @@ public class HomeActivity extends BaseActivity {
                         }
                         break;
                     case R.id.user:
+                        initOtherToolBar();
                         tv_search.setVisibility(View.GONE);
                         if (userFragment == null){
                             userFragment = UserFragment.getInstance();
