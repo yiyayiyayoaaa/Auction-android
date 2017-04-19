@@ -22,6 +22,11 @@
         <activity android:name=".app.LoginActivity"/>
         <activity android:name=".app.RegisterActivity"/>
         <activity android:name=".app.home.SearchActivity"/>
+        <activity android:name=".app.user.UserAddressActivity"/>
+        <activity android:name=".app.user.AddressAddActivity"/>
+        <activity android:name=".cascade.activity.MainActivity"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
+            />
     </application>
 
 </manifest>

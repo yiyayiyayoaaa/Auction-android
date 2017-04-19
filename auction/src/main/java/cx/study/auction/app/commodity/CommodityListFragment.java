@@ -2,7 +2,6 @@ package cx.study.auction.app.commodity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +13,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cx.study.auction.R;
+import cx.study.auction.app.base.BaseFragment;
 import cx.study.auction.bean.Commodity;
 
 /**
@@ -21,7 +21,7 @@ import cx.study.auction.bean.Commodity;
  * Created by cheng.xiao on 2017/4/17.
  */
 
-public class CommodityListFragment extends Fragment{
+public class CommodityListFragment extends BaseFragment {
     @Bind(R.id.recycle_view)
     RecyclerView recyclerView;
     List<Commodity> commodityList;

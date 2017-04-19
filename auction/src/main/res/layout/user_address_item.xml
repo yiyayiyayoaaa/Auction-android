@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp"
+    >
+    <LinearLayout
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="xxx"
+            android:textSize="18sp"
+            />
+        <TextView
+            android:id="@+id/tv_phone"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            tools:text="18238456745"
+            android:textSize="18sp"
+            android:gravity="end"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_marginBottom="1dp"
+        android:padding="10dp"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:gravity="start"
+        tools:text="dadasdadadasdddddddddddddddddddddddsadadadadad"
+        />
+    <LinearLayout
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:layout_height="wrap_content">
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+        <TextView
+            android:id="@+id/btn_edit"
+            android:textSize="18sp"
+            android:gravity="end|center"
+            android:text=" 编辑  "
+            android:drawableLeft="@drawable/icon_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/btn_delete"
+            android:textSize="18sp"
+            android:gravity="end|center"
+            android:text=" 删除  "
+            android:drawableLeft="@drawable/icon_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,68 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+        <LinearLayout
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:background="#E9E9E9"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_gravity="end|center"
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="取消"
+                android:background="@null"
+                android:textSize="18sp"
+                android:textColor="#000000" />
+            <Space
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:layout_gravity="end|center"
+                android:id="@+id/btn_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="确定"
+                android:textSize="18sp"
+                android:background="@null"
+                android:textColor="#000000" />
+        </LinearLayout>
+    <LinearLayout
+        android:background="#E9E9E9"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:padding="30dp"
+        android:orientation="horizontal" >
+
+        <cx.study.auction.widget.WheelView
+            android:id="@+id/id_province"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+        </cx.study.auction.widget.WheelView>
+
+        <cx.study.auction.widget.WheelView
+            android:id="@+id/id_city"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+        </cx.study.auction.widget.WheelView>
+
+        <cx.study.auction.widget.WheelView
+            android:id="@+id/id_district"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+        </cx.study.auction.widget.WheelView>
+    </LinearLayout>
+
+</LinearLayout>

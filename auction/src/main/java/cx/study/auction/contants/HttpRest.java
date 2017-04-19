@@ -18,4 +18,11 @@ public interface HttpRest {
     String BID_RECORDS_REST = BASE_URL + "CommodityRest/bidRecords.do";
     String COMMODITY_TYPE   = BASE_URL + "CommodityRest/commodityType.do";
     String COMMODITIES = BASE_URL + "CommodityRest/commodities.do";
+
+    /*地址*/
+    String USER_ADDRESS = BASE_URL + "UserAddressRest/";
+    String USER_ADDRESS_ADD = USER_ADDRESS + "add.do";
+    String USER_ADDRESS_UPDATE = USER_ADDRESS + "update.do";
+    String USER_ADDRESS_DELETE = USER_ADDRESS + "delete.do";
+    String USER_ADDRESS_GET_ALL = USER_ADDRESS + "getAll.do";
 }

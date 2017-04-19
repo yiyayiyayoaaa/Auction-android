@@ -1,5 +1,6 @@
 package cx.study.auction.app.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -57,7 +58,8 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_address_manager:
-
+                Intent intent = new Intent(getActivity(),UserAddressActivity.class);
+                startActivity(intent);
                 break;
         }
     }

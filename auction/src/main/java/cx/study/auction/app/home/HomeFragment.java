@@ -1,5 +1,6 @@
 package cx.study.auction.app.home;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -79,6 +81,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         View view = inflater.inflate(R.layout.fragment_home,null);
         ButterKnife.bind(this,view);
         swipe.setOnRefreshListener(this);
+
         initViewPager();
         //loadData();
         swipe.post(new Runnable() {
@@ -164,6 +167,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private Task<List<HomeItem>> loadData() {
+        final WeakReference<Activity> ref = new WeakReference<Activity>(getActivity());
         return Task.callInBackground(new Callable<List<HomeItem>>() {
             @Override
             public List<HomeItem> call() throws Exception {
@@ -178,6 +182,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         swipe.setRefreshing(false);
                     }
                 });
+                Activity context = ref.get();
+                if (context == null || context.isFinishing()){
+                    return null;
+                }
                 if (!task.isFaulted()){
                     adapter = new HomeAdapter(task.getResult());
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(),6,GridLayoutManager.VERTICAL,false));
