@@ -86,6 +86,7 @@ public class HomeActivity extends BaseActivity {
                 switch (item.getItemId()){
                     case R.id.homePage:
                         initHomeToolBar();
+                        setSingleAction( 0, "" , null);
                         tv_search.setVisibility(View.VISIBLE);
                         if (homeFragment == null){
                             homeFragment = HomeFragment.getInstance();
@@ -96,6 +97,7 @@ public class HomeActivity extends BaseActivity {
                         break;
                     case R.id.type:
                         initHomeToolBar();
+                        setSingleAction( 0, "" , null);
                         tv_search.setVisibility(View.VISIBLE);
                         if (typeFragment == null){
                             typeFragment = TypeFragment.getInstance();
@@ -106,6 +108,7 @@ public class HomeActivity extends BaseActivity {
                         break;
                     case R.id.auction:
                         initOtherToolBar();
+                        setSingleAction( 0, "" , null);
                         tv_search.setVisibility(View.GONE);
                         if (auctionFragment == null){
                             auctionFragment = AuctionFragment.getInstance();
