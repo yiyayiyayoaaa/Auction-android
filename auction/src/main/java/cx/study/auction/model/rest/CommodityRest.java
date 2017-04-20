@@ -64,4 +64,20 @@ public class CommodityRest extends AbstractRest{
         HttpResult response = HttpClient.doJSONPost(HttpRest.COMMODITIES,jsonObj);
         return getListFromData(response.string(),new Json2Commodity());
     }
+
+    public boolean getPayDepositRecord(int userId,int commodityId) throws MCException {
+        Map<String, Object> jsonObj = Maps.newHashMap();
+        jsonObj.put("userId",userId);
+        jsonObj.put("commodityId",commodityId);
+        HttpResult response = HttpClient.doJSONPost(HttpRest.DEPOSIT_IS_PAY,jsonObj);
+        return response.code == 0;
+    }
+
+    public int payDeposit(int userId,int commodityId) throws MCException {
+        Map<String, Object> jsonObj = Maps.newHashMap();
+        jsonObj.put("userId",userId);
+        jsonObj.put("commodityId",commodityId);
+        HttpResult response = HttpClient.doJSONPost(HttpRest.DEPOSIT_PAY,jsonObj);
+        return response.code;
+    }
 }
