@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cx.study.auction.R;
 import cx.study.auction.app.base.BaseFragment;
+import cx.study.auction.app.order.OrderListActivity;
 import cx.study.auction.bean.User;
 import cx.study.auction.model.dao.UserDao;
 import cx.study.auction.model.rest.UserRest;
@@ -113,6 +114,7 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
             R.id.btn_wait_received,R.id.btn_address_manager,R.id.btn_account,R.id.btn_recharge})
     @Override
     public void onClick(View v) {
+        Intent orderIntent = new Intent(getActivity(), OrderListActivity.class);
         switch (v.getId()){
             case R.id.btn_address_manager:
                 Intent intent = new Intent(getActivity(),UserAddressActivity.class);
@@ -120,6 +122,21 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
                 break;
             case R.id.btn_recharge:
                 recharge();
+                break;
+            case R.id.btn_wait_pay:
+                orderIntent.putExtra("type",1);
+                startActivity(orderIntent);
+                break;
+            case R.id.btn_wait_send:
+                orderIntent.putExtra("type",2);
+                startActivity(orderIntent);
+                break;
+            case R.id.btn_wait_received:
+                orderIntent.putExtra("type",3);
+                startActivity(orderIntent);
+                break;
+            case R.id.btn_view_all_order:
+                startActivity(orderIntent);
                 break;
         }
     }

@@ -27,6 +27,7 @@
         <activity android:name=".cascade.activity.MainActivity"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             />
+        <activity android:name=".app.order.OrderListActivity"/>
     </application>
 
 </manifest>
