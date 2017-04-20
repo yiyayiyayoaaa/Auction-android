@@ -22,16 +22,18 @@
             android:layout_gravity="center"
             android:layout_margin="20dp"
             />
+
         <TextView
-            android:gravity="center|start"
-            android:layout_gravity="center"
+            android:id="@+id/textView"
             android:layout_width="0dp"
-            android:layout_weight="5"
             android:layout_height="match_parent"
-            tools:text="咿呀咿呀哟啊啊啊"
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            android:gravity="center|start"
             android:text="咿呀咿呀哟啊啊啊"
             android:textSize="20sp"
-            />
+            tools:text="咿呀咿呀哟啊啊啊" />
+
         <TextView
             android:id="@+id/btn_user_info"
             android:gravity="center"

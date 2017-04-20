@@ -19,10 +19,22 @@ public interface HttpRest {
     String COMMODITY_TYPE   = BASE_URL + "CommodityRest/commodityType.do";
     String COMMODITIES = BASE_URL + "CommodityRest/commodities.do";
 
+
+    /*用户*/
+    String USER = BASE_URL + "UserRest/";
+    String USER_RECHARGE = USER + "recharge.do";
+    String USER_INFO = USER + "userInfo.do";
+
     /*地址*/
     String USER_ADDRESS = BASE_URL + "UserAddressRest/";
     String USER_ADDRESS_ADD = USER_ADDRESS + "add.do";
     String USER_ADDRESS_UPDATE = USER_ADDRESS + "update.do";
     String USER_ADDRESS_DELETE = USER_ADDRESS + "delete.do";
     String USER_ADDRESS_GET_ALL = USER_ADDRESS + "getAll.do";
+
+    /*Deposit*/
+
+    String DEPOSIT = BASE_URL + "DepositRest/";
+    String DEPOSIT_PAY = DEPOSIT + "pay.do";
+    String DEPOSIT_IS_PAY = DEPOSIT + "isPayDeposit.do";
 }

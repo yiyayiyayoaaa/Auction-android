@@ -108,6 +108,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initView() {
+        initBidStatus();
         getBidRecords(this);
         commodityName.setText(commodity.getCommodityName());
         staringPrice.setText(getString(R.string.start_price,commodity.getStartingPrice()));
@@ -118,6 +119,39 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
         tvCustomer.setText(getString(R.string.customer,commodity.getCustomerName()));
 
     }
+
+    private void initBidStatus(){
+        //查看是否缴纳保证金
+        if (user == null){
+            btnBid.setText("参与拍卖");
+        } else {
+            isPay().continueWith(new Continuation<Boolean, Object>() {
+                @Override
+                public Object then(Task<Boolean> task) throws Exception {
+                    if (!task.isFaulted()){
+                        if (task.getResult()){
+                            btnBid.setText("出价");
+                        } else {
+                            btnBid.setText("参与拍卖");
+                        }
+                    }
+                    return null;
+                }
+            },Task.UI_THREAD_EXECUTOR);
+        }
+
+    }
+
+    private Task<Boolean> isPay(){
+        return Task.callInBackground(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                return commodityRest.getPayDepositRecord(user.getId(),commodity.getId());
+            }
+        });
+    }
+
+
     private void init(){
         userDao = new UserDao(this);
         user = userDao.getLocalUser();
@@ -203,7 +237,8 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                                 @Override
                                 public void run() {
                                     tvTime.setText(content);
-                                    btnBid.setVisibility(View.VISIBLE);
+                                    btnBid.setClickable(true);
+                                    btnBid.setEnabled(true);
                                 }
                             });
                         } else {
@@ -213,7 +248,13 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                                 @Override
                                 public void run() {
                                     tvTime.setText("结束");
-                                    btnBid.setVisibility(View.GONE);
+                                    if (btnBid.getText().equals("出价")){
+                                        btnBid.setClickable(false);
+                                        btnBid.setEnabled(false);
+                                    } else {
+                                        btnBid.setClickable(true);
+                                        btnBid.setEnabled(true);
+                                    }
                                 }
                             });
                         }
@@ -235,7 +276,13 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                                 @Override
                                 public void run() {
                                     tvTime.setText(content);
-                                    btnBid.setVisibility(View.GONE);
+                                   if (btnBid.getText().equals("出价")){
+                                       btnBid.setClickable(false);
+                                       btnBid.setEnabled(false);
+                                   } else {
+                                       btnBid.setClickable(true);
+                                       btnBid.setEnabled(true);
+                                   }
                                 }
                             });
                         } else {
@@ -287,14 +334,19 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
             case R.id.btn_bid:
                 //判断是否登录
                 if(user!= null) {
-                    refreshCommodity().onSuccess(new Continuation<Commodity, Object>() {
-                        @Override
-                        public Object then(Task<Commodity> task) throws Exception {
-                            commodity = task.getResult();
-                            bidPrice();
-                            return null;
-                        }
-                    },Task.UI_THREAD_EXECUTOR);
+                    if (btnBid.getText().equals("出价")) {
+                        refreshCommodity().onSuccess(new Continuation<Commodity, Object>() {
+                            @Override
+                            public Object then(Task<Commodity> task) throws Exception {
+                                commodity = task.getResult();
+                                bidPrice();
+                                return null;
+                            }
+                        }, Task.UI_THREAD_EXECUTOR);
+                    }else{
+                        //支付保证金
+                        payDeposit();
+                    }
                 } else {
                     Toast.makeText(this,"请先登录",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(this, LoginActivity.class);
@@ -307,6 +359,26 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
             default:
 
         }
+    }
+
+    private void payDeposit(){
+        final WeakReference<Activity> ref = new WeakReference<Activity>(this);
+        double deposit = commodity.getBiddingDeposit();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("请输入您的出价");
+        builder.setMessage("您确定要支付保证金" + deposit + "元吗?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("确定",null);
+        builder.setNegativeButton("取消",null);
+        final AlertDialog dialog = builder.show();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                postDeposit(user.getId(),commodity.getId(),ref.get());
+                dialog.dismiss();
+            }
+        });
     }
 
     private void bidPrice(){
@@ -372,6 +444,29 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                     //错误信息
                     Toast.makeText(context,task.getError().getMessage(),Toast.LENGTH_SHORT).show();
                 }
+                return null;
+            }
+        },Task.UI_THREAD_EXECUTOR);
+    }
+
+
+
+    private Task<Integer> postDeposit(final int userId, final int commodityId, final Context context){
+        return Task.callInBackground(new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                return commodityRest.payDeposit(userId,commodityId);
+            }
+        }).onSuccess(new Continuation<Integer, Integer>() {
+            @Override
+            public Integer then(Task<Integer> task) throws Exception {
+                if (!task.isFaulted()){
+                    if (task.getResult() == -1){
+                        //余额不足
+                        Toast.makeText(context,"余额不足",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                initBidStatus();
                 return null;
             }
         },Task.UI_THREAD_EXECUTOR);

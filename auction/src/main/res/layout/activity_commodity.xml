@@ -103,6 +103,7 @@
                 android:layout_marginBottom="1dp"
                 android:lines="1"
                 android:padding="10dp"
+                android:visibility="gone"
                 />
             <TextView
                 android:id="@+id/bid_increments"
@@ -228,13 +229,14 @@
             android:textSize="16sp" />
 
         <Button
+            android:layout_margin="5dp"
             android:id="@+id/btn_bid"
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="出价"
+            android:text="参与竞拍"
             android:padding="2dp"
-            android:drawableLeft="@drawable/icon_bid"
+            android:background="@android:color/holo_red_light"
             />
     </LinearLayout>
 </LinearLayout>
