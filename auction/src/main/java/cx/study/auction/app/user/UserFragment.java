@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import cx.study.auction.R;
 import cx.study.auction.app.LoginActivity;
 import cx.study.auction.app.base.BaseFragment;
+import cx.study.auction.app.order.OrderListActivity;
 import cx.study.auction.bean.User;
 import cx.study.auction.model.dao.UserDao;
 import cx.study.auction.model.rest.UserRest;
@@ -132,6 +133,7 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
             R.id.btn_wait_received,R.id.btn_address_manager,R.id.btn_account,R.id.btn_recharge,R.id.layout_not_login})
     @Override
     public void onClick(View v) {
+        Intent orderIntent = new Intent(getActivity(), OrderListActivity.class);
         switch (v.getId()){
             case R.id.btn_user_info:
                 Intent i = new Intent(getActivity(),UserInfoActivity.class);
@@ -148,6 +150,21 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
                 Intent intent1 = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent1);
                 getActivity().finish();
+                break;
+            case R.id.btn_wait_pay:
+                orderIntent.putExtra("type",1);
+                startActivity(orderIntent);
+                break;
+            case R.id.btn_wait_send:
+                orderIntent.putExtra("type",2);
+                startActivity(orderIntent);
+                break;
+            case R.id.btn_wait_received:
+                orderIntent.putExtra("type",3);
+                startActivity(orderIntent);
+                break;
+            case R.id.btn_view_all_order:
+                startActivity(orderIntent);
                 break;
         }
     }
