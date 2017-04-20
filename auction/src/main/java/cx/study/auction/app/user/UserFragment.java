@@ -114,6 +114,10 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.btn_user_info:
+                Intent i = new Intent(getActivity(),UserInfoActivity.class);
+                startActivity(i);
+                break;
             case R.id.btn_address_manager:
                 Intent intent = new Intent(getActivity(),UserAddressActivity.class);
                 startActivity(intent);
