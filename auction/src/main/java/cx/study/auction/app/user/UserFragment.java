@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cx.study.auction.R;
+import cx.study.auction.app.LoginActivity;
 import cx.study.auction.app.base.BaseFragment;
 import cx.study.auction.app.order.OrderListActivity;
 import cx.study.auction.bean.User;
@@ -56,6 +58,12 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
     TextView btnAccount;
     @Bind(R.id.btn_recharge)
     TextView btnRecharge;
+    @Bind(R.id.layout_not_login)
+    TextView layout_not_login;
+    @Bind(R.id.user1)
+    LinearLayout user1;
+    @Bind(R.id.user2)
+    LinearLayout user2;
     @Bind(R.id.textView)
     TextView tvNickname;
     UserRest userRest;
@@ -107,21 +115,41 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_user,container,false);
         ButterKnife.bind(this,view);
+        UserDao userDao = new UserDao(getActivity());
+        User user = userDao.getLocalUser();
+        if (user == null){
+            user1.setVisibility(View.GONE);
+            user2.setVisibility(View.GONE);
+            layout_not_login.setVisibility(View.VISIBLE);
+        } else {
+            user1.setVisibility(View.VISIBLE);
+            user2.setVisibility(View.VISIBLE);
+            layout_not_login.setVisibility(View.GONE);
+        }
         return view;
     }
 
     @OnClick({R.id.btn_portrait,R.id.btn_user_info,R.id.btn_view_all_order,R.id.btn_wait_pay,R.id.btn_wait_send,
-            R.id.btn_wait_received,R.id.btn_address_manager,R.id.btn_account,R.id.btn_recharge})
+            R.id.btn_wait_received,R.id.btn_address_manager,R.id.btn_account,R.id.btn_recharge,R.id.layout_not_login})
     @Override
     public void onClick(View v) {
         Intent orderIntent = new Intent(getActivity(), OrderListActivity.class);
         switch (v.getId()){
+            case R.id.btn_user_info:
+                Intent i = new Intent(getActivity(),UserInfoActivity.class);
+                startActivity(i);
+                break;
             case R.id.btn_address_manager:
                 Intent intent = new Intent(getActivity(),UserAddressActivity.class);
                 startActivity(intent);
                 break;
             case R.id.btn_recharge:
                 recharge();
+                break;
+            case R.id.layout_not_login:
+                Intent intent1 = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent1);
+                getActivity().finish();
                 break;
             case R.id.btn_wait_pay:
                 orderIntent.putExtra("type",1);
