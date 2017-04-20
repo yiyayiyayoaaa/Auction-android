@@ -51,8 +51,18 @@ public class HomeActivity extends BaseActivity {
             getSupportActionBar().hide();
             initToolbar();
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimaryDark));
         }
     }
+    private void initToolbarByOrange(){
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+            initToolbar();
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.holo_orange_light));
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +86,7 @@ public class HomeActivity extends BaseActivity {
                 switch (item.getItemId()){
                     case R.id.homePage:
                         initHomeToolBar();
+                        setSingleAction( 0, "" , null);
                         tv_search.setVisibility(View.VISIBLE);
                         if (homeFragment == null){
                             homeFragment = HomeFragment.getInstance();
@@ -86,6 +97,7 @@ public class HomeActivity extends BaseActivity {
                         break;
                     case R.id.type:
                         initHomeToolBar();
+                        setSingleAction( 0, "" , null);
                         tv_search.setVisibility(View.VISIBLE);
                         if (typeFragment == null){
                             typeFragment = TypeFragment.getInstance();
@@ -96,6 +108,7 @@ public class HomeActivity extends BaseActivity {
                         break;
                     case R.id.auction:
                         initOtherToolBar();
+                        setSingleAction( 0, "" , null);
                         tv_search.setVisibility(View.GONE);
                         if (auctionFragment == null){
                             auctionFragment = AuctionFragment.getInstance();
@@ -105,7 +118,8 @@ public class HomeActivity extends BaseActivity {
                         }
                         break;
                     case R.id.user:
-                        initOtherToolBar();
+                        initToolbarByOrange();
+                        setSingleAction(R.drawable.icon_setting, "设置", getResources().getDrawable(R.drawable.icon_setting));
                         tv_search.setVisibility(View.GONE);
                         if (userFragment == null){
                             userFragment = UserFragment.getInstance();
