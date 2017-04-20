@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
+    android:layout_marginBottom="3dp"
     android:layout_height="wrap_content">
     <LinearLayout
         android:layout_marginBottom="1dp"
@@ -60,7 +61,6 @@
                 android:gravity="center_vertical"
                 tools:text="dasadadadaddasd"
                 android:padding="2dp"
-                android:textSize="18sp"
                 />
 
             <TextView

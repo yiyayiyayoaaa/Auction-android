@@ -19,7 +19,9 @@ public interface HttpRest {
     String COMMODITY_TYPE   = BASE_URL + "CommodityRest/commodityType.do";
     String COMMODITIES = BASE_URL + "CommodityRest/commodities.do";
 
-
+    /*订单*/
+    String ORDER = BASE_URL + "OrderRest/";
+    String ORDER_LIST = ORDER + "orderList.do";
     /*用户*/
     String USER = BASE_URL + "UserRest/";
     String USER_RECHARGE = USER + "recharge.do";

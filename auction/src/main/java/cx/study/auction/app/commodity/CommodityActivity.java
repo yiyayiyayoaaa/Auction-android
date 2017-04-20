@@ -124,6 +124,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
         //查看是否缴纳保证金
         if (user == null){
             btnBid.setText("参与拍卖");
+            btnBid.setVisibility(View.VISIBLE);
         } else {
             isPay().continueWith(new Continuation<Boolean, Object>() {
                 @Override
@@ -135,6 +136,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                             btnBid.setText("参与拍卖");
                         }
                     }
+                    btnBid.setVisibility(View.VISIBLE);
                     return null;
                 }
             },Task.UI_THREAD_EXECUTOR);

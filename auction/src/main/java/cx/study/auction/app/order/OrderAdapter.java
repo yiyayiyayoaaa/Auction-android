@@ -13,6 +13,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cx.study.auction.R;
 import cx.study.auction.bean.Order;
+import cx.study.auction.util.DateUtil;
 
 /**
  *
@@ -37,7 +38,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
 
     @Override
     public void onBindViewHolder(OrderHolder holder, int position) {
-
+        Order order = orders.get(position);
+        holder.setOrder(order);
     }
 
     @Override
@@ -61,7 +63,42 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
         }
 
         public void setOrder(Order order){
-
+            tvName.setText(order.getCommodityName());
+            tvOrderNum.setText(order.getOrderNum());
+            tvPrice.setText("金额："+ order.getPrice() + "元");
+            tvTime.setText("创建时间："+ DateUtil.getDateTimeString(order.getStartTime()));
+            switch (order.getStatus()){
+                case Order.OrderStatus.WAIT_PAY:
+                    tvStatus.setText("待付款");
+                    btnReceived.setVisibility(View.GONE);
+                    btnCancel.setVisibility(View.VISIBLE);
+                    btnPay.setVisibility(View.VISIBLE);
+                    break;
+                case Order.OrderStatus.WAIT_SEND:
+                    tvStatus.setText("待发货");
+                    btnReceived.setVisibility(View.GONE);
+                    btnCancel.setVisibility(View.VISIBLE);
+                    btnPay.setVisibility(View.GONE);
+                    break;
+                case Order.OrderStatus.WAIT_RECEIVED:
+                    tvStatus.setText("待收货");
+                    btnPay.setVisibility(View.GONE);
+                    btnReceived.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.GONE);
+                    break;
+                case Order.OrderStatus.FINISH:
+                    tvStatus.setText("已完成");
+                    btnReceived.setVisibility(View.GONE);
+                    btnCancel.setVisibility(View.VISIBLE);
+                    btnPay.setVisibility(View.GONE);
+                    break;
+                case Order.OrderStatus.CANCEL:
+                    tvStatus.setText("已取消");
+                    btnPay.setVisibility(View.GONE);
+                    btnReceived.setVisibility(View.GONE);
+                    btnCancel.setVisibility(View.GONE);
+                    break;
+            }
         }
     }
 }

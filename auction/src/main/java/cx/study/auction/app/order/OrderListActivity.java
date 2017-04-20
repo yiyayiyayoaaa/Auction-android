@@ -45,16 +45,19 @@ public class OrderListActivity extends BaseActivity{
         titles.add("待支付");
         titles.add("待发货");
         titles.add("待接收");
+        titles.add("已完成");
         titles.add("已取消");
         Fragment fragmentAll = OrderListFragment.getInstance(titles.get(0));
         Fragment fragmentWaitPay = OrderListFragment.getInstance(titles.get(1));
         Fragment fragmentWaitSend = OrderListFragment.getInstance(titles.get(2));
         Fragment fragmentWaitReceived = OrderListFragment.getInstance(titles.get(3));
-        Fragment fragmentIsCancel = OrderListFragment.getInstance(titles.get(4));
+        Fragment fragmentIsFinish = OrderListFragment.getInstance(titles.get(4));
+        Fragment fragmentIsCancel = OrderListFragment.getInstance(titles.get(5));
         fragments.add(fragmentAll);
         fragments.add(fragmentWaitPay);
         fragments.add(fragmentWaitSend);
         fragments.add(fragmentWaitReceived);
+        fragments.add(fragmentIsFinish);
         fragments.add(fragmentIsCancel);
 
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
