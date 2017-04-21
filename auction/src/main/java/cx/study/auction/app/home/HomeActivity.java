@@ -44,6 +44,7 @@ public class HomeActivity extends BaseActivity {
             toolbar.setTitle(getTitle());
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
+        setSingleAction( -1, "" , null);
     }
 
     private void initOtherToolBar(){
@@ -53,6 +54,8 @@ public class HomeActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimaryDark));
         }
+        setTitle("我的拍卖");
+        setSingleAction( -1, "" , null);
     }
     private void initToolbarByOrange(){
         if (getSupportActionBar() != null){
@@ -61,6 +64,8 @@ public class HomeActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.holo_orange_light));
         }
+        setSingleAction(R.drawable.icon_setting, "设置", getResources().getDrawable(R.drawable.icon_setting));
+
     }
 
     @Override
@@ -82,51 +87,40 @@ public class HomeActivity extends BaseActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 FragmentTransaction transaction = fm.beginTransaction();
-                hideAllFragment(transaction);
+                //hideAllFragment(transaction);
                 switch (item.getItemId()){
                     case R.id.homePage:
                         initHomeToolBar();
-                        setSingleAction( 0, "" , null);
+
                         tv_search.setVisibility(View.VISIBLE);
-                        if (homeFragment == null){
+                        if (homeFragment == null) {
                             homeFragment = HomeFragment.getInstance();
-                            transaction.add(R.id.fragment_container,homeFragment);
-                        } else {
-                            transaction.show(homeFragment);
                         }
+                        transaction.replace(R.id.fragment_container,homeFragment);
                         break;
                     case R.id.type:
                         initHomeToolBar();
-                        setSingleAction( 0, "" , null);
                         tv_search.setVisibility(View.VISIBLE);
-                        if (typeFragment == null){
+                        if (typeFragment == null) {
                             typeFragment = TypeFragment.getInstance();
-                            transaction.add(R.id.fragment_container,typeFragment);
-                        } else {
-                            transaction.show(typeFragment);
                         }
+                        transaction.replace(R.id.fragment_container,typeFragment);
                         break;
                     case R.id.auction:
                         initOtherToolBar();
-                        setSingleAction( 0, "" , null);
                         tv_search.setVisibility(View.GONE);
-                        if (auctionFragment == null){
+                        if (auctionFragment == null) {
                             auctionFragment = AuctionFragment.getInstance();
-                            transaction.add(R.id.fragment_container,auctionFragment);
-                        } else {
-                            transaction.show(auctionFragment);
                         }
+                        transaction.replace(R.id.fragment_container,auctionFragment);
                         break;
                     case R.id.user:
                         initToolbarByOrange();
-                        setSingleAction(R.drawable.icon_setting, "设置", getResources().getDrawable(R.drawable.icon_setting));
                         tv_search.setVisibility(View.GONE);
-                        if (userFragment == null){
+                        if (userFragment == null) {
                             userFragment = UserFragment.getInstance();
-                            transaction.add(R.id.fragment_container,userFragment);
-                        } else {
-                            transaction.show(userFragment);
                         }
+                        transaction.replace(R.id.fragment_container,userFragment);
                         break;
                 }
                 transaction.commit();
@@ -135,20 +129,20 @@ public class HomeActivity extends BaseActivity {
         });
     }
 
-    private void hideAllFragment(FragmentTransaction transaction) {
-        if (homeFragment != null){
-            transaction.hide(homeFragment);
-        }
-        if (typeFragment != null){
-            transaction.hide(typeFragment);
-        }
-        if (auctionFragment != null){
-            transaction.hide(auctionFragment);
-        }
-        if (userFragment != null){
-            transaction.hide(userFragment);
-        }
-    }
+//    private void hideAllFragment(FragmentTransaction transaction) {
+//        if (homeFragment != null){
+//            transaction.hide(homeFragment);
+//        }
+//        if (typeFragment != null){
+//            transaction.hide(typeFragment);
+//        }
+//        if (auctionFragment != null){
+//            transaction.hide(auctionFragment);
+//        }
+//        if (userFragment != null){
+//            transaction.hide(userFragment);
+//        }
+//    }
 
     @OnClick(R.id.tv_search)
     public void search(TextView textView){

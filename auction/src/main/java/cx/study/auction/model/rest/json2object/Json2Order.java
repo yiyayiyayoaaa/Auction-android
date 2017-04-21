@@ -23,6 +23,7 @@ public class Json2Order implements Json2Object<Order>{
         order.setId(jsonObject.optInt("id"));
         order.setCommodityId(jsonObject.optInt("commodityId"));
         order.setCommodityName(jsonObject.optString("commodityName"));
+        order.setDescription(jsonObject.optString("description"));
         order.setUrl(jsonObject.optString("url"));
         order.setUserId(jsonObject.optInt("userId"));
         order.setAddress(jsonObject.optString("address"));
@@ -35,7 +36,10 @@ public class Json2Order implements Json2Object<Order>{
         }
         order.setStartTime(DateUtil.getDateByString(jsonObject.optString("startTime")));
 //        order.setUpdateTime(DateUtil.getDateByString(jsonObject.optString("updateTime")));
-//        order.setEndTime(DateUtil.getDateByString(jsonObject.optString("endTime")));
+        String endTime = jsonObject.optString("endTime");
+        if (!TextUtils.isEmpty(endTime)){
+            order.setEndTime(DateUtil.getDateByString(endTime));
+        }
         return order;
     }
 }

@@ -53,6 +53,15 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressH
                 deleteDialog(address.getId());
             }
         });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("address",address.getAddress());
+                context.setResult(Activity.RESULT_OK,intent);
+                context.finish();
+            }
+        });
     }
 
 

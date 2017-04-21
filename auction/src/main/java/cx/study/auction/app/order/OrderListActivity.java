@@ -1,6 +1,7 @@
 package cx.study.auction.app.order;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -63,6 +64,9 @@ public class OrderListActivity extends BaseActivity{
     public void onDoOrderEvent(DoOrderEvent event){
         switch (event.event){
             case Event.PAY:
+                Intent intent = new Intent(this,OrderActivity.class);
+                intent.putExtra("id",event.orderId);
+                startActivity(intent);
                 doPay(event.orderId);
                 break;
             case Event.CANCEL:

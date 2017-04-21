@@ -22,6 +22,7 @@ public class Order implements Serializable{
     private String orderNum;
     private int commodityId;
     private String commodityName;
+    private String description;
     private String url;
     private String address;
     private double price;
@@ -134,5 +135,13 @@ public class Order implements Serializable{
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

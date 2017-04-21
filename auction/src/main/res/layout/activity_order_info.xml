@@ -3,87 +3,97 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_marginBottom="3dp"
-    android:layout_height="wrap_content">
-    <LinearLayout
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        tools:text="交易成功"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:padding="5dp"
+        android:background="@android:color/holo_green_light"
+        />
+    <TextView
+        android:id="@+id/tv_address"
         android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/tv_order_num"
-            android:padding="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="订单号：123456789"
-            android:textSize="18sp"
-            />
-        <TextView
-            android:id="@+id/tv_status"
-            android:padding="10dp"
-            android:gravity="end"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="待支付"
-            android:textSize="18sp"
-            />
-    </LinearLayout>
-
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:minHeight="40dp"
+        android:textSize="16sp"
+        android:drawablePadding="10dp"
+        tools:text="收货人：大神大多\n收货地址：倒萨大所多撒多撒多撒大多多\n联系电话:123456"
+        android:drawableLeft="@drawable/icon_dizhi"
+        android:drawableStart="@drawable/icon_dizhi"
+        android:layout_marginBottom="5dp"
+        />
     <LinearLayout
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="5dp"
         android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:orientation="horizontal"
         >
 
         <ImageView
-            android:padding="5dp"
+            android:padding="2dp"
             android:id="@+id/image_order"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:scaleType="fitXY"
-            android:src="@mipmap/ic_launcher" />
+            tools:src="@mipmap/ic_launcher" />
 
         <LinearLayout
             android:layout_margin="5dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
                 android:gravity="center_vertical"
                 tools:text="dasadadadaddasd"
                 android:padding="2dp"
                 />
 
             <TextView
-                android:id="@+id/tv_price"
+                android:id="@+id/tv_description"
                 android:padding="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                tools:text="金额:1000.00"
-                android:gravity="end"
+                android:gravity="start"
+                tools:text="dadsadadasdsadsadad"
                 />
 
             <TextView
-                android:id="@+id/tv_time"
+                android:id="@+id/tv_price"
                 android:padding="2dp"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="end"
-                tools:text="创建时间：2017-07-12 12:20:23"
+                android:layout_height="wrap_content"
+                android:gravity="end|bottom"
+                tools:text="成交价:1000.00"
+
                 />
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_order_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/white"
+        android:padding="5dp"
+        android:textSize="16sp"
+        tools:text="订单遍：23132132131\n\n创建时间:dsadsadsad" />
+
     <LinearLayout
         android:layout_marginBottom="1dp"
         android:background="@android:color/white"
@@ -117,6 +127,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="确认收货"
+            android:textSize="16sp"
+            />
+        <TextView
+            android:id="@+id/btn_remove"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除订单"
             android:textSize="16sp"
             />
     </LinearLayout>

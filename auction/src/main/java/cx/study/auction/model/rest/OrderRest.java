@@ -39,4 +39,11 @@ public class OrderRest extends AbstractRest{
         jsonObj.put("id", id);
         HttpClient.doJSONPost(HttpRest.ORDER_CANCEL,jsonObj);
     }
+
+    public Order getOrderById(int id) throws MCException{
+        Map<String, Object> jsonObj = Maps.newHashMap();
+        jsonObj.put("id", id);
+        HttpResult result = HttpClient.doJSONPost(HttpRest.ORDER_INFO, jsonObj);
+        return new Json2Order().json2Object(result.object());
+    }
 }

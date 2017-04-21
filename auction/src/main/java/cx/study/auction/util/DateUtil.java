@@ -22,11 +22,17 @@ public class DateUtil {
     }
 
     public static String getDateString(Date date){
+        if (date == null){
+            return "";
+        }
         SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm", Locale.CHINESE);
         return format.format(date);
     }
 
     public static String getDateTimeString(Date date){
+        if (date == null){
+            return "";
+        }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE);
         return format.format(date);
     }

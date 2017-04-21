@@ -1,6 +1,7 @@
 package cx.study.auction.app.order;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,8 +48,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
 
     @Override
     public void onBindViewHolder(OrderHolder holder, int position) {
-        Order order = orders.get(position);
+        final Order order = orders.get(position);
         holder.setOrder(order,context);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,OrderActivity.class);
+                intent.putExtra("id",order.getId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
