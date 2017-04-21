@@ -1,5 +1,7 @@
 package cx.study.auction.model.rest.json2object;
 
+import android.text.TextUtils;
+
 import org.json.JSONObject;
 
 import cx.study.auction.bean.Order;
@@ -21,15 +23,19 @@ public class Json2Order implements Json2Object<Order>{
         order.setId(jsonObject.optInt("id"));
         order.setCommodityId(jsonObject.optInt("commodityId"));
         order.setCommodityName(jsonObject.optString("commodityName"));
+        order.setUrl(jsonObject.optString("url"));
         order.setUserId(jsonObject.optInt("userId"));
         order.setAddress(jsonObject.optString("address"));
         order.setPrice(jsonObject.optDouble("price"));
         order.setStatus(jsonObject.optInt("status"));
         order.setOrderNum(jsonObject.optString("orderNum"));
-        order.setPayTime(DateUtil.getDateByString(jsonObject.optString("payTime")));
+        String payTime = jsonObject.optString("payTime");
+        if (!TextUtils.isEmpty(payTime)){
+            order.setPayTime(DateUtil.getDateByString(payTime));
+        }
         order.setStartTime(DateUtil.getDateByString(jsonObject.optString("startTime")));
-        order.setUpdateTime(DateUtil.getDateByString(jsonObject.optString("updateTime")));
-        order.setEndTime(DateUtil.getDateByString(jsonObject.optString("endTime")));
+//        order.setUpdateTime(DateUtil.getDateByString(jsonObject.optString("updateTime")));
+//        order.setEndTime(DateUtil.getDateByString(jsonObject.optString("endTime")));
         return order;
     }
 }

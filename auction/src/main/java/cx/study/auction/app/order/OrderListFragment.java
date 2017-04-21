@@ -11,6 +11,10 @@ import android.view.ViewGroup;
 
 import com.google.common.collect.Lists;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -22,6 +26,7 @@ import cx.study.auction.R;
 import cx.study.auction.app.base.BaseFragment;
 import cx.study.auction.bean.Order;
 import cx.study.auction.bean.User;
+import cx.study.auction.event.RefreshEvent;
 import cx.study.auction.model.dao.UserDao;
 import cx.study.auction.model.rest.OrderRest;
 
@@ -93,6 +98,9 @@ public class OrderListFragment extends BaseFragment{
     public void onResume() {
         super.onResume();
         geOrderList();
+        if (!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
     }
 
     private Task<List<Order>> geOrderList(){
@@ -114,4 +122,16 @@ public class OrderListFragment extends BaseFragment{
         },Task.UI_THREAD_EXECUTOR);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRefreshEvent(RefreshEvent event){
+        geOrderList();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 }

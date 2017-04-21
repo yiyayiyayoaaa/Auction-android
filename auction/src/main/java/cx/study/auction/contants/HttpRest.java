@@ -22,6 +22,9 @@ public interface HttpRest {
     /*订单*/
     String ORDER = BASE_URL + "OrderRest/";
     String ORDER_LIST = ORDER + "orderList.do";
+    String ORDER_PAY = ORDER + "pay.do";
+    String ORDER_CANCEL = ORDER + "cancel.do";
+    String ORDER_FINISH = ORDER + "orderList.do";
     /*用户*/
     String USER = BASE_URL + "UserRest/";
     String USER_RECHARGE = USER + "recharge.do";

@@ -5,14 +5,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cx.study.auction.R;
 import cx.study.auction.bean.Order;
+import cx.study.auction.contants.HttpRest;
+import cx.study.auction.event.DoOrderEvent;
+import cx.study.auction.event.DoOrderEvent.Event;
 import cx.study.auction.util.DateUtil;
 
 /**
@@ -39,7 +48,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
     @Override
     public void onBindViewHolder(OrderHolder holder, int position) {
         Order order = orders.get(position);
-        holder.setOrder(order);
+        holder.setOrder(order,context);
     }
 
     @Override
@@ -47,7 +56,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
         return orders.size();
     }
 
-    public static class OrderHolder extends RecyclerView.ViewHolder{
+    public static class OrderHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @Bind(R.id.tv_order_num)TextView tvOrderNum;
         @Bind(R.id.tv_status)TextView tvStatus;
         @Bind(R.id.tv_name)TextView tvName;
@@ -56,17 +65,22 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
         @Bind(R.id.btn_pay)TextView btnPay;
         @Bind(R.id.btn_cancel)TextView btnCancel;
         @Bind(R.id.btn_received)TextView btnReceived;
-
+        @Bind(R.id.image_order)ImageView orderImage;
+        private Order order;
         public OrderHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
 
-        public void setOrder(Order order){
+        public void setOrder(Order order, Activity context){
+            this.order = order;
             tvName.setText(order.getCommodityName());
             tvOrderNum.setText(order.getOrderNum());
             tvPrice.setText("金额："+ order.getPrice() + "元");
             tvTime.setText("创建时间："+ DateUtil.getDateTimeString(order.getStartTime()));
+            Picasso.with(context)
+                    .load(HttpRest.BASE_URL + order.getUrl())
+                    .into(orderImage);
             switch (order.getStatus()){
                 case Order.OrderStatus.WAIT_PAY:
                     tvStatus.setText("待付款");
@@ -99,6 +113,24 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
                     btnCancel.setVisibility(View.GONE);
                     break;
             }
+        }
+        @OnClick({R.id.btn_pay,R.id.btn_cancel,R.id.btn_received})
+        @Override
+        public void onClick(View v) {
+            DoOrderEvent event = new DoOrderEvent();
+            event.orderId = order.getId();
+            switch (v.getId()){
+                case R.id.btn_pay:
+                    event.event = Event.PAY;
+                    break;
+                case R.id.btn_cancel:
+                    event.event = Event.CANCEL;
+                    break;
+                case R.id.btn_received:
+                    event.event = Event.RECEIVED;
+                    break;
+            }
+            EventBus.getDefault().post(event);
         }
     }
 }

@@ -22,6 +22,7 @@ public class Order implements Serializable{
     private String orderNum;
     private int commodityId;
     private String commodityName;
+    private String url;
     private String address;
     private double price;
     private int userId;
@@ -33,6 +34,14 @@ public class Order implements Serializable{
 
     public int getId() {
         return id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public void setId(int id) {
