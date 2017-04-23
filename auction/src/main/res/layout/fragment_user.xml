@@ -6,23 +6,23 @@
     android:background="@color/light_gray"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:id="@+id/user1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal"
         android:background="@android:color/holo_orange_light"
-        >
+        android:orientation="horizontal">
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/btn_portrait"
             android:layout_width="0dp"
-            android:layout_weight="2"
             android:layout_height="match_parent"
-            android:src="@color/colorPrimaryDark"
             android:layout_gravity="center"
             android:layout_margin="20dp"
-            />
+            android:layout_weight="2"
+            android:src="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/textView"
@@ -37,15 +37,14 @@
 
         <TextView
             android:id="@+id/btn_user_info"
-            android:gravity="center"
-            android:layout_gravity="center"
             android:layout_width="0dp"
-            android:layout_weight="3"
             android:layout_height="match_parent"
-            tools:text="个人资料"
-            android:text="个人资料"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="设置"
             android:textSize="16sp"
-            />
+            tools:text="设置" />
     </LinearLayout>
 
     <LinearLayout

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/auction.iml" filepath="$PROJECT_DIR$/auction.iml" />
-      <module fileurl="file://$PROJECT_DIR$/auction/auction-auction.iml" filepath="$PROJECT_DIR$/auction/auction-auction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Auction-android.iml" filepath="$PROJECT_DIR$/Auction-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/auction/auction.iml" filepath="$PROJECT_DIR$/auction/auction.iml" />
     </modules>
   </component>
 </project>

@@ -70,6 +70,11 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
     UserDao userDao;
     User user;
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userRest = new UserRest();
@@ -129,14 +134,14 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
         return view;
     }
 
-    @OnClick({R.id.btn_portrait,R.id.btn_user_info,R.id.btn_view_all_order,R.id.btn_wait_pay,R.id.btn_wait_send,
+    @OnClick({R.id.btn_portrait,R.id.btn_view_all_order,R.id.btn_user_info,R.id.btn_wait_pay,R.id.btn_wait_send,
             R.id.btn_wait_received,R.id.btn_address_manager,R.id.btn_account,R.id.btn_recharge,R.id.layout_not_login})
     @Override
     public void onClick(View v) {
         Intent orderIntent = new Intent(getActivity(), OrderListActivity.class);
         switch (v.getId()){
             case R.id.btn_user_info:
-                Intent i = new Intent(getActivity(),UserInfoActivity.class);
+                Intent i = new Intent(getActivity(),SettingActivity.class);
                 startActivity(i);
                 break;
             case R.id.btn_address_manager:

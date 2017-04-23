@@ -6,7 +6,8 @@ package cx.study.auction.contants;
  */
 
 public interface HttpRest {
-    String SERVER_URL = "http://192.168.0.109:8080/";
+   // String SERVER_URL = "http://192.168.0.109:8080/";
+    String SERVER_URL = "http://172.27.35.3:8080/";
     String BASE_URL = SERVER_URL;
     String HOME_PAGE_REST = BASE_URL + "rest/homeInfo.do";
 
@@ -16,15 +17,18 @@ public interface HttpRest {
     String LOGIN_REST = BASE_URL + "UserRest/login.do";
     String REGISTER_REST = BASE_URL + "UserRest/register.do";
     String BID_RECORDS_REST = BASE_URL + "CommodityRest/bidRecords.do";
-    String COMMODITY_TYPE   = BASE_URL + "CommodityRest/commodityType.do";
-    String COMMODITIES = BASE_URL + "CommodityRest/commodities.do";
 
+    /* Commodity */
+  String COMMODITY = BASE_URL + "CommodityRest/";
+    String COMMODITY_TYPE   = COMMODITY + "commodityType.do";
+    String COMMODITIES = COMMODITY  + "commodities.do";
+    String COMMODITY_AUCTION = COMMODITY  + "auction.do";
     /*订单*/
     String ORDER = BASE_URL + "OrderRest/";
     String ORDER_LIST = ORDER + "orderList.do";
     String ORDER_PAY = ORDER + "pay.do";
     String ORDER_CANCEL = ORDER + "cancel.do";
-    String ORDER_FINISH = ORDER + "orderList.do";
+    String ORDER_FINISH = ORDER + "finish.do";
     String ORDER_INFO = ORDER + "orderInfo.do";
     /*用户*/
     String USER = BASE_URL + "UserRest/";
@@ -39,7 +43,6 @@ public interface HttpRest {
     String USER_ADDRESS_GET_ALL = USER_ADDRESS + "getAll.do";
 
     /*Deposit*/
-
     String DEPOSIT = BASE_URL + "DepositRest/";
     String DEPOSIT_PAY = DEPOSIT + "pay.do";
     String DEPOSIT_IS_PAY = DEPOSIT + "isPayDeposit.do";

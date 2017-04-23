@@ -28,27 +28,27 @@
         android:drawableStart="@drawable/icon_dizhi"
         android:layout_marginBottom="5dp"
         />
+
     <LinearLayout
-        android:layout_marginBottom="5dp"
-        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:orientation="horizontal"
-        >
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
 
         <ImageView
-            android:padding="2dp"
             android:id="@+id/image_order"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:padding="2dp"
             android:scaleType="fitXY"
             tools:src="@mipmap/ic_launcher" />
 
         <LinearLayout
-            android:layout_margin="5dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:layout_weight="2"
             android:orientation="vertical">
 
@@ -56,28 +56,26 @@
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
                 android:gravity="center_vertical"
-                tools:text="dasadadadaddasd"
                 android:padding="2dp"
-                />
+                android:textSize="18sp"
+                tools:text="dasadadadaddasd" />
 
             <TextView
                 android:id="@+id/tv_description"
-                android:padding="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="start"
-                tools:text="dadsadadasdsadsadad"
-                />
+                android:padding="2dp"
+                tools:text="dadsadadasdsadsadad" />
 
             <TextView
                 android:id="@+id/tv_price"
-                android:padding="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end|bottom"
+                android:padding="2dp"
                 tools:text="成交价:1000.00"
 
                 />
@@ -95,48 +93,55 @@
         tools:text="订单遍：23132132131\n\n创建时间:dsadsadsad" />
 
     <LinearLayout
+        android:id="@+id/layout_tool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
         android:background="@android:color/white"
-        android:orientation="horizontal"
         android:gravity="end"
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal"
+        android:padding="10dp">
+
         <TextView
             android:id="@+id/btn_pay"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/rectangle_background_select"
+            android:padding="5dp"
             android:text="付款"
-            />
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/btn_cancel"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:text="取消订单"
-            android:textSize="16sp"
-            />
+            android:background="@drawable/rectangle_background_select"
+            android:padding="5dp"
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/btn_received"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:text="确认收货"
-            android:textSize="16sp"
-            />
-        <TextView
-            android:id="@+id/btn_remove"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="删除订单"
-            android:textSize="16sp"
-            />
+            android:background="@drawable/rectangle_background_select"
+            android:padding="5dp"
+            android:textSize="16sp" />
+        <!--<TextView-->
+        <!--android:id="@+id/btn_remove"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="删除订单"-->
+        <!--android:textSize="16sp"-->
+        <!--/>-->
     </LinearLayout>
 </LinearLayout>

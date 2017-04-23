@@ -49,4 +49,8 @@ public class UserDao {
         }
         return user;
     }
+
+    public void logout(){
+        spf.edit().clear().apply();
+    }
 }

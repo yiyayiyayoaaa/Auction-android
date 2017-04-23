@@ -103,14 +103,14 @@ public class TypeFragment extends BaseFragment{
         loadData(-1);
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden){
-            initType();
-            loadData(-1);
-        }
-    }
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        super.onHiddenChanged(hidden);
+//        if (!hidden){
+//            initType();
+//            loadData(-1);
+//        }
+//    }
 
     @Override
     public void onResume() {
@@ -148,5 +148,10 @@ public class TypeFragment extends BaseFragment{
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);
     }
 }

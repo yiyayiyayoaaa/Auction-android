@@ -80,4 +80,11 @@ public class CommodityRest extends AbstractRest{
         HttpResult response = HttpClient.doJSONPost(HttpRest.DEPOSIT_PAY,jsonObj);
         return response.code;
     }
+
+    public List<Commodity> getAuction(int userId) throws MCException {
+        Map<String, Object> jsonObj = Maps.newHashMap();
+        jsonObj.put("userId",userId);
+        HttpResult response = HttpClient.doJSONPost(HttpRest.COMMODITY_AUCTION,jsonObj);
+        return getListFromData(response.string(),new Json2Commodity());
+    }
 }

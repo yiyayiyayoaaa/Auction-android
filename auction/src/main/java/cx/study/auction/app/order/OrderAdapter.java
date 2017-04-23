@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -75,6 +76,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
         @Bind(R.id.btn_cancel)TextView btnCancel;
         @Bind(R.id.btn_received)TextView btnReceived;
         @Bind(R.id.image_order)ImageView orderImage;
+        @Bind(R.id.layout_tool)LinearLayout layoutTool;
         private Order order;
         public OrderHolder(View itemView) {
             super(itemView);
@@ -96,30 +98,32 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
                     btnReceived.setVisibility(View.GONE);
                     btnCancel.setVisibility(View.VISIBLE);
                     btnPay.setVisibility(View.VISIBLE);
+                    layoutTool.setVisibility(View.VISIBLE);
                     break;
                 case Order.OrderStatus.WAIT_SEND:
                     tvStatus.setText("待发货");
                     btnReceived.setVisibility(View.GONE);
                     btnCancel.setVisibility(View.VISIBLE);
                     btnPay.setVisibility(View.GONE);
+                    layoutTool.setVisibility(View.VISIBLE);
                     break;
                 case Order.OrderStatus.WAIT_RECEIVED:
                     tvStatus.setText("待收货");
                     btnPay.setVisibility(View.GONE);
                     btnReceived.setVisibility(View.VISIBLE);
                     btnCancel.setVisibility(View.GONE);
+                    layoutTool.setVisibility(View.VISIBLE);
                     break;
                 case Order.OrderStatus.FINISH:
                     tvStatus.setText("已完成");
-                    btnReceived.setVisibility(View.GONE);
-                    btnCancel.setVisibility(View.VISIBLE);
-                    btnPay.setVisibility(View.GONE);
+                    layoutTool.setVisibility(View.GONE);
                     break;
                 case Order.OrderStatus.CANCEL:
                     tvStatus.setText("已取消");
-                    btnPay.setVisibility(View.GONE);
-                    btnReceived.setVisibility(View.GONE);
-                    btnCancel.setVisibility(View.GONE);
+                    layoutTool.setVisibility(View.GONE);
+//                    btnPay.setVisibility(View.GONE);
+//                    btnReceived.setVisibility(View.GONE);
+//                    btnCancel.setVisibility(View.GONE);
                     break;
             }
         }

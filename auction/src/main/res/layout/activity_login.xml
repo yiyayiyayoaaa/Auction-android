@@ -2,29 +2,65 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <EditText
-        android:id="@+id/et_username"
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="输入账号"
+        android:text="用户登录"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:padding="10dp"
+        android:textStyle="bold"
         />
-    <EditText
-        android:id="@+id/et_password"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:background="@drawable/rectangle_background_default"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="输入密码"
-        />
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:drawableLeft="@drawable/icon_user"
+            android:background="@drawable/rectangle_background1"
+            android:layout_marginBottom="2dp"
+            android:drawablePadding="10dp"
+            android:hint="输入账号" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"
+            />
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_background1"
+            android:hint="输入密码"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/icon_password"
+            android:inputType="textPassword"
+            android:padding="10dp" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="登录"
+        android:layout_margin="5dp"
+        android:background="@drawable/rectangle_background_select"
         />
     <Button
         android:id="@+id/btn_to_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="去注册"
+        android:layout_margin="5dp"
+        android:background="@drawable/rectangle_background_default"
         />
 </LinearLayout>

@@ -466,6 +466,8 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                     if (task.getResult() == -1){
                         //余额不足
                         Toast.makeText(context,"余额不足",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context,task.getError().getMessage(),Toast.LENGTH_SHORT).show();
                     }
                 }
                 initBidStatus();

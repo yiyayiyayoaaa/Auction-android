@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,6 +39,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cx.study.auction.R;
 import cx.study.auction.app.commodity.CommodityActivity;
+import cx.study.auction.app.type.TypeFragment;
 import cx.study.auction.bean.Commodity;
 import cx.study.auction.bean.Commodity.CommodityStatus;
 import cx.study.auction.bean.HomeItem;
@@ -68,11 +71,17 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     HomeAdapter adapter;
     HomeRest homeRest;
     ScheduledExecutorService executorService;
+    FragmentManager fm;
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         homeRest = new HomeRest();
+        fm = getFragmentManager();
     }
 
     @Nullable
@@ -108,6 +117,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onPause() {
         super.onPause();
+        swipe.setRefreshing(false);
         EventBus.getDefault().unregister(this);
         if (executorService != null){
             executorService.shutdown();
@@ -282,13 +292,26 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            HomeItem homeItem = items.get(position);
+            final HomeItem homeItem = items.get(position);
+            final int i = position;
             switch (homeItem.getType()){
                 case HomeItem.TITLE:
-                    HomeTitleHolder titleHolder = (HomeTitleHolder) holder;
+                    final HomeTitleHolder titleHolder = (HomeTitleHolder) holder;
                     //HomeItem<String> titleItem = (HomeTitleItem) homeItem;
                     titleHolder.itemTitle.setText((String) homeItem.getObj());
                     titleHolder.itemMore.setText("更多");
+                    titleHolder.itemMore.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FragmentTransaction ft = fm.beginTransaction();
+                            Fragment fragment = TypeFragment.getInstance();
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("typeId",i);
+                            fragment.setArguments(bundle);
+                            ft.replace(R.id.fragment_container,fragment);
+                            ft.commit();
+                        }
+                    });
                     break;
                 case HomeItem.CONTENT:
                     HomeContentHolder contentHolder = (HomeContentHolder) holder;

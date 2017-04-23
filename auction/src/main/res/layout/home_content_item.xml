@@ -6,14 +6,13 @@
     android:layout_margin="2dp"
     android:background="@android:color/white"
     android:layout_gravity="center"
-    android:layout_height="200dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:padding="2dp"
         android:id="@+id/item_image"
-        android:layout_weight="0.6"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="150dp"
         android:src="@mipmap/ic_launcher"
         />
 
@@ -21,26 +20,28 @@
         android:id="@+id/item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="dsadadadadasdsadsadsad"
-        android:maxLines="2"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        />
+        android:gravity="start"
+        android:padding="5dp"
+        android:textSize="16sp"
+        tools:text="dsadadadadasdsadsadsad" />
+
     <TextView
         android:id="@+id/item_text_left"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="xxxxxx"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:layout_width="match_parent"
+        tools:text="xxxxxx"
+        android:textSize="16sp"
+        android:padding="5dp"
+        android:gravity="center|start"
         />
     <TextView
         android:id="@+id/item_text_right"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="x"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:layout_width="match_parent"
+        tools:text="x"
+        android:textSize="16sp"
+        android:padding="5dp"
+        android:gravity="center|start"
         />
     <!--<RelativeLayout-->
         <!--android:layout_weight="0.1"-->

@@ -20,6 +20,7 @@ import cx.study.auction.R;
 import cx.study.auction.app.auction.AuctionFragment;
 import cx.study.auction.app.base.BaseActivity;
 import cx.study.auction.app.type.TypeFragment;
+import cx.study.auction.app.user.SettingActivity;
 import cx.study.auction.app.user.UserFragment;
 
 public class HomeActivity extends BaseActivity {
@@ -44,7 +45,6 @@ public class HomeActivity extends BaseActivity {
             toolbar.setTitle(getTitle());
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
-        setSingleAction( -1, "" , null);
     }
 
     private void initOtherToolBar(){
@@ -55,7 +55,6 @@ public class HomeActivity extends BaseActivity {
             getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimaryDark));
         }
         setTitle("我的拍卖");
-        setSingleAction( -1, "" , null);
     }
     private void initToolbarByOrange(){
         if (getSupportActionBar() != null){
@@ -64,7 +63,6 @@ public class HomeActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.holo_orange_light));
         }
-        setSingleAction(R.drawable.icon_setting, "设置", getResources().getDrawable(R.drawable.icon_setting));
 
     }
 
@@ -87,11 +85,9 @@ public class HomeActivity extends BaseActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 FragmentTransaction transaction = fm.beginTransaction();
-                //hideAllFragment(transaction);
                 switch (item.getItemId()){
                     case R.id.homePage:
                         initHomeToolBar();
-
                         tv_search.setVisibility(View.VISIBLE);
                         if (homeFragment == null) {
                             homeFragment = HomeFragment.getInstance();
@@ -129,20 +125,6 @@ public class HomeActivity extends BaseActivity {
         });
     }
 
-//    private void hideAllFragment(FragmentTransaction transaction) {
-//        if (homeFragment != null){
-//            transaction.hide(homeFragment);
-//        }
-//        if (typeFragment != null){
-//            transaction.hide(typeFragment);
-//        }
-//        if (auctionFragment != null){
-//            transaction.hide(auctionFragment);
-//        }
-//        if (userFragment != null){
-//            transaction.hide(userFragment);
-//        }
-//    }
 
     @OnClick(R.id.tv_search)
     public void search(TextView textView){
@@ -150,4 +132,12 @@ public class HomeActivity extends BaseActivity {
         startActivity(intent);
     }
 
+//    @Override
+//    public void onActionClick(ActionItem item) {
+//        super.onActionClick(item);
+//        if (item.getItemId() == R.drawable.icon_setting){
+//            Intent intent = new Intent(this, SettingActivity.class);
+//            startActivity(intent);
+//        }
+//    }
 }

@@ -1,12 +1,14 @@
 package cx.study.auction.app.order;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.google.common.collect.Lists;
@@ -61,47 +63,91 @@ public class OrderListActivity extends BaseActivity{
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDoOrderEvent(DoOrderEvent event){
+    public void onDoOrderEvent(final DoOrderEvent event){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setNegativeButton("取消",null);
         switch (event.event){
             case Event.PAY:
+                Toast.makeText(this,"请填写收货地址",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this,OrderActivity.class);
                 intent.putExtra("id",event.orderId);
                 startActivity(intent);
-                doPay(event.orderId);
+                //doPay(event.orderId);
                 break;
             case Event.CANCEL:
-                doCancel(event.orderId);
+                builder.setMessage("您确定要取消该订单吗？取消订单后保证金不会退还！");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doCancel(event.orderId);
+                    }
+                });
+                builder.show();
                 break;
             case Event.RECEIVED:
+                builder.setMessage("是否确认收货？");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doReceived(event.orderId);
+                    }
+                });
+                builder.show();
                 break;
         }
     }
 
-    private Task<Void> doPay(final int id){
-        final WeakReference<Activity> ref = new WeakReference<Activity>(this);
-        MCProgress.show("操作中",this);
-        return Task.callInBackground(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                orderRest.pay(id);
-                return null;
+//    private Task<Void> doPay(final int id){
+//        final WeakReference<Activity> ref = new WeakReference<Activity>(this);
+//        MCProgress.show("操作中",this);
+//        return Task.callInBackground(new Callable<Void>() {
+//            @Override
+//            public Void call() throws Exception {
+//                orderRest.pay(id);
+//                return null;
+//            }
+//        }).continueWith(new Continuation<Void, Void>() {
+//            @Override
+//            public Void then(Task<Void> task) throws MCException {
+//                MCProgress.dismiss();
+//                if (!task.isFaulted()){
+//                    //geOrderList();
+//                    EventBus.getDefault().post(new RefreshEvent());
+//                } else {
+//                    Exception error = task.getError();
+//                    Toast.makeText(ref.get(),error.getMessage(),Toast.LENGTH_SHORT).show();
+//                }
+//                return null;
+//            }
+//        },Task.UI_THREAD_EXECUTOR);
+//    }
+private Task<Void> doReceived(final int id){
+    final WeakReference<Activity> ref = new WeakReference<Activity>(this);
+    MCProgress.show("操作中",this);
+    return Task.callInBackground(new Callable<Void>() {
+        @Override
+        public Void call() throws MCException, MCException {
+            orderRest.finish(id);
+            return null;
+        }
+    }).continueWith(new Continuation<Void, Void>() {
+        @Override
+        public Void then(Task<Void> task) throws MCException {
+            MCProgress.dismiss();
+            if (!task.isFaulted()){
+                //geOrderList();
+                Toast.makeText(ref.get(),"交易完成",Toast.LENGTH_SHORT).show();
+                //getOrderInfo(order.getId());
+                EventBus.getDefault().post(new RefreshEvent());
+            } else {
+                Exception error = task.getError();
+                Toast.makeText(ref.get(),error.getMessage(),Toast.LENGTH_SHORT).show();
             }
-        }).continueWith(new Continuation<Void, Void>() {
-            @Override
-            public Void then(Task<Void> task) throws MCException {
-                MCProgress.dismiss();
-                if (!task.isFaulted()){
-                    //geOrderList();
-                    EventBus.getDefault().post(new RefreshEvent());
-                } else {
-                    Exception error = task.getError();
-                    Toast.makeText(ref.get(),error.getMessage(),Toast.LENGTH_SHORT).show();
-                }
-                return null;
-            }
-        },Task.UI_THREAD_EXECUTOR);
-    }
-
+            return null;
+        }
+    },Task.UI_THREAD_EXECUTOR);
+}
     private Task<Void> doCancel(final int id){
         final WeakReference<Activity> ref = new WeakReference<Activity>(this);
         MCProgress.show("操作中",this);
@@ -117,6 +163,7 @@ public class OrderListActivity extends BaseActivity{
                 MCProgress.dismiss();
                 if (!task.isFaulted()){
                     //geOrderList();
+                    Toast.makeText(ref.get(),"取消订单成功",Toast.LENGTH_SHORT).show();
                     EventBus.getDefault().post(new RefreshEvent());
                 } else {
                     Exception error = task.getError();
