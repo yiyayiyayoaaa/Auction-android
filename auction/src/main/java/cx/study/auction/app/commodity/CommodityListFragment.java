@@ -36,7 +36,7 @@ public class CommodityListFragment extends BaseFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        //super.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

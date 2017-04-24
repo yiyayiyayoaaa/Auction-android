@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "cx.study.auction"
         minSdkVersion 20
-        targetSdkVersion 25
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
 

@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
@@ -21,10 +19,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cx.study.auction.R;
 import cx.study.auction.bean.Order;
-import cx.study.auction.contants.HttpRest;
 import cx.study.auction.event.DoOrderEvent;
 import cx.study.auction.event.DoOrderEvent.Event;
 import cx.study.auction.util.DateUtil;
+import cx.study.auction.util.PicassoUtil;
 
 /**
  *
@@ -89,9 +87,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
             tvOrderNum.setText(order.getOrderNum());
             tvPrice.setText("金额："+ order.getPrice() + "元");
             tvTime.setText("创建时间："+ DateUtil.getDateTimeString(order.getStartTime()));
-            Picasso.with(context)
-                    .load(HttpRest.BASE_URL + order.getUrl())
-                    .into(orderImage);
+            PicassoUtil.show(orderImage,order.getUrl());
             switch (order.getStatus()){
                 case Order.OrderStatus.WAIT_PAY:
                     tvStatus.setText("待付款");

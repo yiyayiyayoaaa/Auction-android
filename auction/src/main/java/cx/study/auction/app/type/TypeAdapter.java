@@ -1,18 +1,15 @@
 package cx.study.auction.app.type;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import java.util.List;
 
 import cx.study.auction.R;
-import cx.study.auction.bean.Commodity;
 import cx.study.auction.bean.CommodityType;
 
 /**
@@ -26,6 +23,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.TypeViewHolder
     }
     OnItemClickListener listener;
     List<CommodityType> types;
+
     private Activity context;
     public TypeAdapter(List<CommodityType> types,Activity context){
         this.types = types;

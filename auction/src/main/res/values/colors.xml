@@ -8,4 +8,5 @@
 
     <color name="light_gray">#FAFAFA</color>
     <color name="province_line_border">#C7C7C7</color>
+    <color name="color_blue">#87CEFA</color>
 </resources>

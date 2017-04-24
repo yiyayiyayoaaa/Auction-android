@@ -40,6 +40,8 @@ public class BaseActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_base);
         initToolbar();
+       // getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.color_blue));
+
     }
 
     /**

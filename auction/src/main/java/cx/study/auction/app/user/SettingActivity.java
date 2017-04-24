@@ -6,12 +6,15 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cx.study.auction.R;
 import cx.study.auction.app.LoginActivity;
 import cx.study.auction.app.base.BaseActivity;
+import cx.study.auction.event.LogoutEvent;
 import cx.study.auction.model.dao.UserDao;
 
 /**
@@ -31,6 +34,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
         userDao = new UserDao(this);
+        setTitle("设置");
     }
 
     @OnClick({R.id.tv_user,R.id.tv_about,R.id.tv_logout})
@@ -49,6 +53,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 intent.setClass(this,LoginActivity.class);
                 startActivity(intent);
                 finish();
+                EventBus.getDefault().post(new LogoutEvent());
                 break;
         }
     }

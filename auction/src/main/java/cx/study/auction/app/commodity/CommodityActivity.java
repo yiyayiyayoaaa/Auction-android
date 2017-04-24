@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.collect.Lists;
-import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.Date;
@@ -44,10 +43,10 @@ import cx.study.auction.bean.BidRecord;
 import cx.study.auction.bean.Commodity;
 import cx.study.auction.bean.Commodity.CommodityStatus;
 import cx.study.auction.bean.User;
-import cx.study.auction.contants.HttpRest;
 import cx.study.auction.model.dao.UserDao;
 import cx.study.auction.model.rest.CommodityRest;
 import cx.study.auction.model.rest.http.MCException;
+import cx.study.auction.util.PicassoUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -188,9 +187,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
             for (String url : commodity.getImageUrls()){
                 Log.e(TAG, "initViewPager: " + url);
                 ImageView view = (ImageView) LayoutInflater.from(this).inflate(R.layout.view_pager_item, null);
-                Picasso.with(this)
-                        .load(HttpRest.BASE_URL + url)
-                        .into(view);
+                PicassoUtil.show(view,url);
                 viewList.add(view);
             }
         }
@@ -456,19 +453,18 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     private Task<Integer> postDeposit(final int userId, final int commodityId, final Context context){
         return Task.callInBackground(new Callable<Integer>() {
             @Override
-            public Integer call() throws Exception {
+            public Integer call() throws MCException {
                 return commodityRest.payDeposit(userId,commodityId);
             }
-        }).onSuccess(new Continuation<Integer, Integer>() {
+        }).continueWith(new Continuation<Integer, Integer>() {
             @Override
-            public Integer then(Task<Integer> task) throws Exception {
+            public Integer then(Task<Integer> task) throws MCException {
                 if (!task.isFaulted()){
-                    if (task.getResult() == -1){
-                        //余额不足
-                        Toast.makeText(context,"余额不足",Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context,task.getError().getMessage(),Toast.LENGTH_SHORT).show();
+                    if (task.getResult() == 0){
+                        Toast.makeText(context,"参与成功！",Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(context,task.getError().getMessage(),Toast.LENGTH_SHORT).show();
                 }
                 initBidStatus();
                 return null;
