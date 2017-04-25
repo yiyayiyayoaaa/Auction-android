@@ -55,6 +55,8 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static cx.study.auction.R.id.commodity_description;
+
 /**
  *
  * Created by cheng.xiao on 2017/3/10.
@@ -75,11 +77,11 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     TextView reversePrice;
     @Bind(R.id.bid_increments)
     TextView bidIncrements;
-    @Bind(R.id.customer)
-    TextView tvCustomer;
+//    @Bind(R.id.customer)
+//    TextView tvCustomer;
     @Bind(R.id.bid_record)
     ListView bidRecord;
-    @Bind(R.id.commodity_description)
+    @Bind(commodity_description)
     TextView commodityDescription;
     @Bind(R.id.time)
     TextView tvTime;
@@ -115,7 +117,8 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
         biddingDeposit.setText(getString(R.string.bidding_deposit,commodity.getBiddingDeposit()));
         reversePrice.setText(getString(R.string.reverse_price,commodity.getReservePrice()));
         bidIncrements.setText(getString(R.string.bid_increments,commodity.getBidIncrements()));
-        tvCustomer.setText(getString(R.string.customer,commodity.getCustomerName()));
+        commodityDescription.setText(commodity.getDescription());
+       // tvCustomer.setText(getString(R.string.customer,commodity.getCustomerName()));
 
     }
 
@@ -140,7 +143,6 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                 }
             },Task.UI_THREAD_EXECUTOR);
         }
-
     }
 
     private Task<Boolean> isPay(){
@@ -187,6 +189,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
             for (String url : commodity.getImageUrls()){
                 Log.e(TAG, "initViewPager: " + url);
                 ImageView view = (ImageView) LayoutInflater.from(this).inflate(R.layout.view_pager_item, null);
+                view.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 PicassoUtil.show(view,url);
                 viewList.add(view);
             }
@@ -299,6 +302,8 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                 },0,1, TimeUnit.SECONDS);
                 break;
             default:
+                btnBid.setVisibility(View.GONE);
+                tvTime.setText("已结束");
         }
     }
     private void stopTime(){
@@ -364,7 +369,6 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
         final WeakReference<Activity> ref = new WeakReference<Activity>(this);
         double deposit = commodity.getBiddingDeposit();
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("请输入您的出价");
         builder.setMessage("您确定要支付保证金" + deposit + "元吗?");
         builder.setCancelable(false);
         builder.setPositiveButton("确定",null);

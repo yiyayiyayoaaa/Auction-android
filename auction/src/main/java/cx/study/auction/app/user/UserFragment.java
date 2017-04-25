@@ -104,6 +104,7 @@ public class UserFragment extends BaseFragment implements View.OnClickListener{
         btnAccount.setText("余额：¥" + user.getAccount()+"元");
     }
 
+
     @Override
     public void onResume() {
         super.onResume();

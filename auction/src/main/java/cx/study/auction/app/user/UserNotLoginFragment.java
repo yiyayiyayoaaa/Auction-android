@@ -40,7 +40,7 @@ public class UserNotLoginFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(getActivity(), LoginActivity.class);
-        intent.putExtra("isGoHome",false);
+        //intent.putExtra("isGoHome",false);
         startActivity(intent);
     }
 }

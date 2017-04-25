@@ -59,6 +59,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         ButterKnife.bind(this);
         int id = getIntent().getIntExtra("id", -1);
         orderRest = new OrderRest();
+        setTitle("订单详情");
         getOrderInfo(id);
     }
 

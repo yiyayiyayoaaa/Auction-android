@@ -111,6 +111,7 @@
             android:background="@drawable/rectangle_background_select"
             android:padding="5dp"
             android:text="付款"
+            android:textColor="@android:color/white"
             android:textSize="16sp" />
 
         <TextView
@@ -119,9 +120,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:text="取消订单"
-            android:background="@drawable/rectangle_background_select"
+            android:background="@drawable/rectangle_background_gray"
             android:padding="5dp"
+            android:text="取消订单"
+            android:textColor="@android:color/white"
             android:textSize="16sp" />
 
         <TextView
@@ -130,9 +132,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:text="确认收货"
-            android:background="@drawable/rectangle_background_select"
+            android:background="@drawable/rectangle_background_red"
             android:padding="5dp"
+            android:text="确认收货"
+            android:textColor="@android:color/white"
             android:textSize="16sp" />
         <!--<TextView-->
         <!--android:id="@+id/btn_remove"-->

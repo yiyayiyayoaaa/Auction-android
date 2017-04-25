@@ -95,15 +95,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public Object then(Task<User> task) throws Exception {
                 if (!task.isFaulted() && task.getResult() != null){
-                    if (isGoHome){
-                        Intent intent = new Intent(ref.get(), HomeActivity.class);
-                        startActivity(intent);
-                    }
                     User user = task.getResult();
                     if (Double.isNaN(user.getAccount())){
                         user.setAccount(0d);
                     }
                     userDao.saveUser(user);
+                    if (isGoHome){
+                        Intent intent = new Intent(ref.get(), HomeActivity.class);
+                        startActivity(intent);
+                    }
                     finish();
                 } else {
                     Exception error = task.getError();

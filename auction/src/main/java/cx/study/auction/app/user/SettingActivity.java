@@ -1,8 +1,10 @@
 package cx.study.auction.app.user;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
 
@@ -40,7 +42,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @OnClick({R.id.tv_user,R.id.tv_about,R.id.tv_logout})
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent();
+        final Intent intent = new Intent();
         switch (v.getId()){
             case R.id.tv_user:
                 intent.setClass(this,UserInfoActivity.class);
@@ -49,11 +51,20 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             case R.id.tv_about:
                 break;
             case R.id.tv_logout:
-                userDao.logout();
-                intent.setClass(this,LoginActivity.class);
-                startActivity(intent);
-                finish();
-                EventBus.getDefault().post(new LogoutEvent());
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        userDao.logout();
+                        intent.setClass(SettingActivity.this,LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                        EventBus.getDefault().post(new LogoutEvent());
+                    }
+                });
+                builder.setNegativeButton("取消",null);
+                builder.setMessage("确定要退出登录吗？");
+                builder.show();
                 break;
         }
     }

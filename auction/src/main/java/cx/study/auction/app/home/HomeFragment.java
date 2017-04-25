@@ -131,6 +131,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private void initViewPager(){
         for (int i = 0; i < 5; i ++){
             ImageView view = (ImageView) LayoutInflater.from(getActivity()).inflate(R.layout.view_pager_item, null);
+            view.setScaleType(ImageView.ScaleType.CENTER_CROP);
             PicassoUtil.show(view,"/file/9e979c9d4e3f40018a65d48c2a3590c1.jpg");
             viewList.add(view);
         }
@@ -241,7 +242,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
             itemTextRight.setText("起拍价：¥" + commodity.getStartingPrice()+"元");
             itemName.setText(commodity.getCommodityName());
-            itemImage.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(),CommodityActivity.class);

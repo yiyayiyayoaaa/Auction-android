@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 import cx.study.auction.R;
 import cx.study.auction.app.base.BaseFragment;
 import cx.study.auction.bean.Commodity;
-import cx.study.auction.bean.Order;
 import cx.study.auction.bean.User;
 import cx.study.auction.model.dao.UserDao;
 import cx.study.auction.model.rest.CommodityRest;
@@ -66,10 +65,10 @@ public class AuctionFragment extends BaseFragment{
     @Override
     public void onResume() {
         super.onResume();
-        loadDate();
+        loadData();
     }
 
-    private Task<List<Commodity>> loadDate(){
+    private Task<List<Commodity>> loadData(){
         return Task.callInBackground(new Callable<List<Commodity>>() {
             @Override
             public List<Commodity> call() throws Exception {
