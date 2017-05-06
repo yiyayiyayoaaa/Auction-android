@@ -36,4 +36,9 @@ public class DateUtil {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE);
         return format.format(date);
     }
+
+    public static String getDateStringByTimestamp(long timestamp){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE);
+        return format.format(new Date(timestamp));
+    }
 }

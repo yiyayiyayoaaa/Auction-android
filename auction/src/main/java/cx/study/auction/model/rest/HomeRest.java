@@ -47,7 +47,7 @@ public class HomeRest extends AbstractRest{
     public List<HomeItem> getHomeInfo() throws MCException {
         Map<String, Object> jsonObj = Maps.newHashMap();
         jsonObj.put("id", 1);
-        HttpResult response = HttpClient.doJSONPost(HttpRest.HOME_PAGE_REST,jsonObj);
+        HttpResult response = HttpClient.doJSONPost(HttpRest.HOME_INFO,jsonObj);
         return getListFromData(response.string(),new Json2HomeItem());
     }
 }
