@@ -4,29 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_user_info"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context="cx.study.auction.app.user.UserInfoActivity"
     android:orientation="vertical"
-    android:showDividers="middle"
-    android:divider="@drawable/divider_horizontal"
-    android:background="@android:color/white">
+    android:divider="@drawable/divider_horizontal">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimaryDark"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:text="个人信息"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-    </android.support.v7.widget.Toolbar>
     <LinearLayout
+        android:layout_marginTop="5dp"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -41,48 +26,47 @@
             android:textSize="18sp"
             android:textColor="@android:color/black"/>
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
+            android:id="@+id/image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@color/colorPrimaryDark"
             android:layout_gravity="right|center"
             android:layout_margin="20dp"
             />
     </LinearLayout>
 
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:paddingBottom="10dp"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginRight="10dp">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="姓名"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textColor="@android:color/black"/>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="right"-->
+            <!--android:text="程晓"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textColor="@android:color/darker_gray"/>-->
+    <!--</LinearLayout>-->
+
     <LinearLayout
+        android:layout_marginTop="5dp"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="姓名"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="程晓"
-            android:textSize="18sp"
-            android:textColor="@android:color/darker_gray"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
-
+        android:padding="10dp"
+        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,22 +75,24 @@
             android:textColor="@android:color/black"/>
 
         <TextView
+            android:id="@+id/tv_nickname"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="right"
-            android:text="咿呀咿呀哟"
+            android:gravity="end|center|right"
+            android:drawableRight="@drawable/icon_more"
+            tools:text="咿呀咿呀哟"
             android:textSize="18sp"
             android:textColor="@android:color/darker_gray"/>
     </LinearLayout>
 
     <LinearLayout
+        android:layout_marginTop="2dp"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:padding="10dp"
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -116,62 +102,42 @@
             android:textColor="@android:color/black"/>
 
         <TextView
+            android:id="@+id/tv_gender"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="right"
-            android:text="男"
+            android:gravity="end|center|right"
+            android:drawableRight="@drawable/icon_more"
+            android:hint="未选择"
             android:textSize="18sp"
             android:textColor="@android:color/darker_gray"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+    <!--<LinearLayout-->
+        <!--android:layout_marginTop="2dp"-->
+        <!--android:background="@android:color/white"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="10dp"-->
+        <!--&gt;-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="出生日期"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="出生日期"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textColor="@android:color/black"/>-->
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="1990-01-01"
-            android:textSize="18sp"
-            android:textColor="@android:color/darker_gray"/>
-    </LinearLayout>
+        <!--<TextView-->
+            <!--android:id="@+id/tv_birth"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:hint="未填写"-->
+            <!--android:textSize="18sp"-->
+            <!--android:gravity="end|center|right"-->
+            <!--android:drawableRight="@drawable/icon_more"-->
+            <!--android:textColor="@android:color/darker_gray"/>-->
+    <!--</LinearLayout>-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="手机"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="18888888888"
-            android:textSize="18sp"
-            android:textColor="@android:color/darker_gray"/>
-    </LinearLayout>
 </LinearLayout>

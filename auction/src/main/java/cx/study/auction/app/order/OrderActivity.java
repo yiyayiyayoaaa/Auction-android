@@ -11,11 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.Callable;
@@ -29,13 +25,12 @@ import cx.study.auction.R;
 import cx.study.auction.app.base.BaseActivity;
 import cx.study.auction.app.user.UserAddressActivity;
 import cx.study.auction.bean.Order;
-import cx.study.auction.contants.HttpRest;
-import cx.study.auction.event.DoOrderEvent;
 import cx.study.auction.event.RefreshEvent;
 import cx.study.auction.model.rest.OrderRest;
 import cx.study.auction.model.rest.http.MCException;
 import cx.study.auction.util.DateUtil;
 import cx.study.auction.util.MCProgress;
+import cx.study.auction.util.PicassoUtil;
 
 /**
  *
@@ -64,6 +59,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         ButterKnife.bind(this);
         int id = getIntent().getIntExtra("id", -1);
         orderRest = new OrderRest();
+        setTitle("订单详情");
         getOrderInfo(id);
     }
 
@@ -100,9 +96,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
            tvName.setText(order.getCommodityName());
            tvPrice.setText("成交价："+ order.getPrice() + "元");
            tvDescription.setText(order.getDescription());
-           Picasso.with(this)
-                   .load(HttpRest.BASE_URL + order.getUrl())
-                   .into(orderImage);
+           PicassoUtil.show(orderImage,order.getUrl());
            switch (order.getStatus()){
                case Order.OrderStatus.WAIT_PAY:
                    tvStatus.setText("待付款");

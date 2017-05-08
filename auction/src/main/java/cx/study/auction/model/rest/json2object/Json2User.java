@@ -20,9 +20,9 @@ public class Json2User implements Json2Object<User>{
         user.setId(jsonObject.optInt("id"));
         user.setUsername(jsonObject.optString("username"));
         user.setPassword(jsonObject.optString("password"));
+        user.setGender(jsonObject.optInt("gender"));
         user.setNickname(jsonObject.optString("nickname"));
         user.setAccount(jsonObject.optDouble("account"));
-        user.setEmail(jsonObject.optString("email"));
         return user;
     }
 }

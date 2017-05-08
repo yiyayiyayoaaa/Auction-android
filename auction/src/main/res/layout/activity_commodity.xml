@@ -38,7 +38,7 @@
                 android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="XXXXXX"
+                tools:text="XXXXXX"
                 android:textSize="20sp"
                 android:lines="1"
                 android:padding="5dp"
@@ -55,7 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="起拍价：¥30.2"
+                    tools:text="起拍价：¥30.2"
                     android:textSize="20sp"
                     android:padding="10dp"
                     android:textColor="@android:color/holo_red_dark"
@@ -76,7 +76,7 @@
                 android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="估价：¥30.2"
+                tools:text="估价：¥30.2"
                 android:textSize="16sp"
                 android:layout_marginBottom="1dp"
                 android:padding="10dp"
@@ -87,7 +87,7 @@
                 android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="保证金：¥30.2"
+                tools:text="保证金：¥30.2"
                 android:textSize="16sp"
                 android:layout_marginBottom="1dp"
                 android:padding="10dp"
@@ -110,28 +110,41 @@
                 android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="竞价增幅：¥30.2"
+                tools:text="竞价增幅：¥30.2"
                 android:textSize="16sp"
                 android:layout_marginBottom="1dp"
                 android:lines="1"
                 android:padding="10dp"
                 />
-            <TextView
-                android:id="@+id/customer"
+            <!--<TextView-->
+                <!--android:id="@+id/customer"-->
+                <!--android:background="@android:color/white"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--tools:text="商品归属单位或个人：XXXX拍卖行"-->
+                <!--android:textSize="16sp"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:lines="1"-->
+                <!--android:padding="10dp"-->
+                <!--/>-->
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:background="@android:color/white"
+                android:padding="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="商品归属单位或个人：XXXX拍卖行"
-                android:textSize="16sp"
-                android:layout_marginBottom="5dp"
-                android:lines="1"
-                android:padding="10dp"
+                android:src="@drawable/img_auction_process"
+                android:scaleType="centerInside"
                 />
             <TextView
                 android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="出价记录"
+                android:drawableLeft="@drawable/icon_bid_record"
+                android:drawablePadding="5dp"
+                android:gravity="center|start"
                 android:textSize="18sp"
                 android:layout_marginBottom="1dp"
                 android:lines="1"
@@ -191,8 +204,11 @@
                 android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="商品描述"
+                android:text="拍品描述"
+                android:drawableLeft="@drawable/icon_description"
                 android:textSize="18sp"
+                android:drawablePadding="5dp"
+                android:gravity="center|start"
                 android:layout_marginBottom="1dp"
                 android:lines="1"
                 android:padding="5dp"
@@ -202,10 +218,18 @@
                 android:id="@+id/commodity_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:padding="10dp"
+                android:textSize="16sp"
                 tools:text="dasdasdasdasdasdadasdasda"
-                >
-
-            </TextView>
+                />
+            <ImageView
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_auction_description"
+                android:scaleType="fitStart"
+                />
         </LinearLayout>
 
     </ScrollView>
@@ -224,7 +248,7 @@
             android:layout_weight="0.6"
             android:gravity="center|start"
             android:padding="5dp"
-            android:text="距离开始还有3小时23分钟23秒"
+            tools:text="距离开始还有3小时23分钟23秒"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="16sp" />
 

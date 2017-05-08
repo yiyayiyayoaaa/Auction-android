@@ -9,36 +9,32 @@
     android:background="@color/light_gray"
     tools:context="cx.study.auction.app.home.HomeActivity">
 
-    <FrameLayout
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
         <FrameLayout
+            android:layout_weight="1"
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp">
 
         </FrameLayout>
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/transparent"
-            >
+        <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="@color/transparent"-->
+            <!--&gt;-->
 
-            <TextView
-                android:id="@+id/tv_search"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center|left"
-                android:background="@drawable/search_style"
-                android:layout_marginRight="50dp"
-                android:layout_marginLeft="50dp"
-                android:drawableLeft="@drawable/search_unchecked1"
-                android:hint="低脂牛奶"/>
+            <!--<TextView-->
+                <!--android:id="@+id/tv_search"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:gravity="center|left"-->
+                <!--android:background="@drawable/search_style"-->
+                <!--android:layout_marginRight="50dp"-->
+                <!--android:layout_marginLeft="50dp"-->
+                <!--android:drawableLeft="@drawable/search_unchecked1"-->
+                <!--android:hint="低脂牛奶"/>-->
 
-        </android.support.v7.widget.Toolbar>
-    </FrameLayout>
+        <!--</android.support.v7.widget.Toolbar>-->
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bnv_bottom_menu"

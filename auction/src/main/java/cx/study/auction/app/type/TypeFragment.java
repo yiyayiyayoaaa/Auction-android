@@ -25,6 +25,7 @@ import cx.study.auction.app.commodity.CommodityListFragment;
 import cx.study.auction.bean.Commodity;
 import cx.study.auction.bean.CommodityType;
 import cx.study.auction.model.rest.CommodityRest;
+import cx.study.auction.util.MCProgress;
 
 /**
  *
@@ -41,6 +42,7 @@ public class TypeFragment extends BaseFragment{
     List<Commodity> commodityList = new ArrayList<>();
     CommodityRest commodityRest;
     TypeAdapter typeAdapter;
+    CommodityType type;
     public static Fragment getInstance(){
         return new TypeFragment();
     }
@@ -49,6 +51,11 @@ public class TypeFragment extends BaseFragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         commodityRest = new CommodityRest();
+        Bundle bundle = getArguments();
+        if (bundle !=  null) {
+            type = (CommodityType) bundle.getSerializable("type");
+            getArguments().clear();
+        }
     }
     private void initType(){
         typeList.clear();
@@ -56,15 +63,20 @@ public class TypeFragment extends BaseFragment{
         typeAll.setSelect(true);
         CommodityType typeAuction = new CommodityType(-2,"正在拍卖");
         CommodityType typeWaitAuction = new CommodityType(-3,"即将开始");
+        if (type != null){
+            type = type.getId() == -2? typeAuction:typeWaitAuction;
+        }
         typeList.add(typeAll);
         typeList.add(typeAuction);
         typeList.add(typeWaitAuction);
         loadType().continueWith(new Continuation<List<CommodityType>, Object>() {
             @Override
             public Object then(Task<List<CommodityType>> task) throws Exception {
+                MCProgress.dismiss();
                 if (!task.isFaulted()){
                     typeList.addAll(task.getResult());
                 }
+                initFrameLayout();
                 typeAdapter.notifyDataSetChanged();
                 return null;
             }
@@ -87,7 +99,7 @@ public class TypeFragment extends BaseFragment{
             }
         });
         rvType.setAdapter(typeAdapter);
-        initFrameLayout();
+
         return view;
     }
 
@@ -100,7 +112,12 @@ public class TypeFragment extends BaseFragment{
                     .add(R.id.fragment_container,commodityListFragment)
                     .commit();
         }
-        loadData(-1);
+        if (type != null){
+            typeAdapter.changeState(type);
+            loadData(type.getId());
+        } else {
+            loadData(-1);
+        }
     }
 
 //    @Override
@@ -119,6 +136,7 @@ public class TypeFragment extends BaseFragment{
     }
 
     private Task<List<CommodityType>> loadType(){
+        MCProgress.show("正在加载",getActivity());
         return Task.callInBackground(new Callable<List<CommodityType>>() {
             @Override
             public List<CommodityType> call() throws Exception {
@@ -152,6 +170,6 @@ public class TypeFragment extends BaseFragment{
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        //super.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
     }
 }

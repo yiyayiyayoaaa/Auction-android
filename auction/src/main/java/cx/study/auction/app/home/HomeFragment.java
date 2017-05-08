@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.common.collect.Lists;
-import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,14 +37,15 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cx.study.auction.R;
 import cx.study.auction.app.commodity.CommodityActivity;
-import cx.study.auction.app.type.TypeFragment;
 import cx.study.auction.bean.Commodity;
 import cx.study.auction.bean.Commodity.CommodityStatus;
+import cx.study.auction.bean.CommodityType;
 import cx.study.auction.bean.HomeItem;
-import cx.study.auction.contants.HttpRest;
+import cx.study.auction.event.MoreClickEvent;
 import cx.study.auction.event.ViewPagerChangeEvent;
 import cx.study.auction.model.rest.HomeRest;
 import cx.study.auction.util.DateUtil;
+import cx.study.auction.util.PicassoUtil;
 
 import static org.greenrobot.eventbus.EventBus.TAG;
 
@@ -72,10 +71,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     HomeRest homeRest;
     ScheduledExecutorService executorService;
     FragmentManager fm;
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        //super.onSaveInstanceState(outState);
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,9 +131,8 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private void initViewPager(){
         for (int i = 0; i < 5; i ++){
             ImageView view = (ImageView) LayoutInflater.from(getActivity()).inflate(R.layout.view_pager_item, null);
-            Picasso.with(getActivity())
-                    .load(HttpRest.BASE_URL + "/file/9e979c9d4e3f40018a65d48c2a3590c1.jpg")
-                    .into(view);
+            view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            PicassoUtil.show(view,"/file/9e979c9d4e3f40018a65d48c2a3590c1.jpg");
             viewList.add(view);
         }
         viewPager.setAdapter(new PagerAdapter() {
@@ -186,12 +180,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }).continueWith(new Continuation<List<HomeItem>, List<HomeItem>>() {
             @Override
             public List<HomeItem> then(Task<List<HomeItem>> task) throws Exception {
-                swipe.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipe.setRefreshing(false);
-                    }
-                });
+                swipe.setRefreshing(false);
                 Activity context = ref.get();
                 if (context == null || context.isFinishing()){
                     return null;
@@ -242,11 +231,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             Integer status = commodity.getStatus();
 
             String imageUrl = commodity.getImageUrls().get(0);
-            Log.d(TAG, "onBindViewHolder: " + imageUrl);
-            Picasso.with(getActivity())
-                    .load(HttpRest.SERVER_URL + imageUrl)
-                    //.resize(200,200)
-                    .into(itemImage);
+            PicassoUtil.show(itemImage,imageUrl);
             switch (status){
                 case CommodityStatus.AUCTION:
                     itemTextLeft.setText(DateUtil.getDateString(commodity.getEndTime()) + " 结束");
@@ -257,7 +242,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
             itemTextRight.setText("起拍价：¥" + commodity.getStartingPrice()+"元");
             itemName.setText(commodity.getCommodityName());
-            itemImage.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(),CommodityActivity.class);
@@ -293,23 +278,24 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             final HomeItem homeItem = items.get(position);
-            final int i = position;
             switch (homeItem.getType()){
                 case HomeItem.TITLE:
                     final HomeTitleHolder titleHolder = (HomeTitleHolder) holder;
                     //HomeItem<String> titleItem = (HomeTitleItem) homeItem;
                     titleHolder.itemTitle.setText((String) homeItem.getObj());
                     titleHolder.itemMore.setText("更多");
+                    final CommodityType type = new CommodityType();
+                    if (position == 0){
+                        type.setId(-2);
+                        type.setTypeName("正在拍卖");
+                    } else {
+                        type.setId(-3);
+                        type.setTypeName("即将开始");
+                    }
                     titleHolder.itemMore.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            FragmentTransaction ft = fm.beginTransaction();
-                            Fragment fragment = TypeFragment.getInstance();
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("typeId",i);
-                            fragment.setArguments(bundle);
-                            ft.replace(R.id.fragment_container,fragment);
-                            ft.commit();
+                            EventBus.getDefault().post(new MoreClickEvent(type));
                         }
                     });
                     break;

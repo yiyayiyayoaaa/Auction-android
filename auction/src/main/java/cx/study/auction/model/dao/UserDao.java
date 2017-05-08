@@ -30,6 +30,9 @@ public class UserDao {
      */
     public void saveUser(User user){
         Gson gson = new Gson();
+        if (Double.isNaN(user.getAccount())){
+            user.setAccount(0d);
+        }
         spf.edit().putString(USER,gson.toJson(user)).apply();
     }
 

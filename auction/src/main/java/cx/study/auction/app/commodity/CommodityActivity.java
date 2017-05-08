@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.collect.Lists;
-import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.Date;
@@ -44,10 +43,10 @@ import cx.study.auction.bean.BidRecord;
 import cx.study.auction.bean.Commodity;
 import cx.study.auction.bean.Commodity.CommodityStatus;
 import cx.study.auction.bean.User;
-import cx.study.auction.contants.HttpRest;
 import cx.study.auction.model.dao.UserDao;
 import cx.study.auction.model.rest.CommodityRest;
 import cx.study.auction.model.rest.http.MCException;
+import cx.study.auction.util.PicassoUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -55,6 +54,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
+import static cx.study.auction.R.id.commodity_description;
 
 /**
  *
@@ -76,11 +77,11 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     TextView reversePrice;
     @Bind(R.id.bid_increments)
     TextView bidIncrements;
-    @Bind(R.id.customer)
-    TextView tvCustomer;
+//    @Bind(R.id.customer)
+//    TextView tvCustomer;
     @Bind(R.id.bid_record)
     ListView bidRecord;
-    @Bind(R.id.commodity_description)
+    @Bind(commodity_description)
     TextView commodityDescription;
     @Bind(R.id.time)
     TextView tvTime;
@@ -116,7 +117,8 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
         biddingDeposit.setText(getString(R.string.bidding_deposit,commodity.getBiddingDeposit()));
         reversePrice.setText(getString(R.string.reverse_price,commodity.getReservePrice()));
         bidIncrements.setText(getString(R.string.bid_increments,commodity.getBidIncrements()));
-        tvCustomer.setText(getString(R.string.customer,commodity.getCustomerName()));
+        commodityDescription.setText(commodity.getDescription());
+       // tvCustomer.setText(getString(R.string.customer,commodity.getCustomerName()));
 
     }
 
@@ -141,7 +143,6 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                 }
             },Task.UI_THREAD_EXECUTOR);
         }
-
     }
 
     private Task<Boolean> isPay(){
@@ -188,9 +189,8 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
             for (String url : commodity.getImageUrls()){
                 Log.e(TAG, "initViewPager: " + url);
                 ImageView view = (ImageView) LayoutInflater.from(this).inflate(R.layout.view_pager_item, null);
-                Picasso.with(this)
-                        .load(HttpRest.BASE_URL + url)
-                        .into(view);
+                view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                PicassoUtil.show(view,url);
                 viewList.add(view);
             }
         }
@@ -302,6 +302,8 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
                 },0,1, TimeUnit.SECONDS);
                 break;
             default:
+                btnBid.setVisibility(View.GONE);
+                tvTime.setText("已结束");
         }
     }
     private void stopTime(){
@@ -367,7 +369,6 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
         final WeakReference<Activity> ref = new WeakReference<Activity>(this);
         double deposit = commodity.getBiddingDeposit();
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("请输入您的出价");
         builder.setMessage("您确定要支付保证金" + deposit + "元吗?");
         builder.setCancelable(false);
         builder.setPositiveButton("确定",null);
@@ -456,19 +457,18 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     private Task<Integer> postDeposit(final int userId, final int commodityId, final Context context){
         return Task.callInBackground(new Callable<Integer>() {
             @Override
-            public Integer call() throws Exception {
+            public Integer call() throws MCException {
                 return commodityRest.payDeposit(userId,commodityId);
             }
-        }).onSuccess(new Continuation<Integer, Integer>() {
+        }).continueWith(new Continuation<Integer, Integer>() {
             @Override
-            public Integer then(Task<Integer> task) throws Exception {
+            public Integer then(Task<Integer> task) throws MCException {
                 if (!task.isFaulted()){
-                    if (task.getResult() == -1){
-                        //余额不足
-                        Toast.makeText(context,"余额不足",Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context,task.getError().getMessage(),Toast.LENGTH_SHORT).show();
+                    if (task.getResult() == 0){
+                        Toast.makeText(context,"参与成功！",Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(context,task.getError().getMessage(),Toast.LENGTH_SHORT).show();
                 }
                 initBidStatus();
                 return null;

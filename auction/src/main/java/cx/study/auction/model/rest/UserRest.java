@@ -25,6 +25,14 @@ public class UserRest extends AbstractRest{
         HttpResult response = HttpClient.doJSONPost(HttpRest.REGISTER_REST,jsonObj);
         return response.code == 0;
     }
+    public boolean register(User user) throws MCException{
+        Map<String, Object> jsonObj = Maps.newHashMap();
+        jsonObj.put("username", user.getUsername());
+        jsonObj.put("password", user.getPassword());
+        jsonObj.put("gender", user.getGender());
+        HttpResult response = HttpClient.doJSONPost(HttpRest.REGISTER_REST,jsonObj);
+        return response.code == 0;
+    }
 
     public User login(String username,String password) throws MCException{
         Map<String, Object> jsonObj = Maps.newHashMap();

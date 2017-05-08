@@ -12,7 +12,7 @@
         android:id="@+id/mcToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimaryDark"
+        android:background="@color/color_blue"
         android:gravity="center_vertical"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"

@@ -1,11 +1,13 @@
 package cx.study.auction.bean;
 
+import java.io.Serializable;
+
 /**
  *
  * Created by chengxiao on 2017/4/16.
  */
 
-public class CommodityType {
+public class CommodityType implements Serializable {
     private int id;
     private String typeName;
     private boolean isSelect;

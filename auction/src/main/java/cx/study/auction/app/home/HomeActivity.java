@@ -1,69 +1,61 @@
 package cx.study.auction.app.home;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cx.study.auction.R;
 import cx.study.auction.app.auction.AuctionFragment;
 import cx.study.auction.app.base.BaseActivity;
 import cx.study.auction.app.type.TypeFragment;
-import cx.study.auction.app.user.SettingActivity;
 import cx.study.auction.app.user.UserFragment;
+import cx.study.auction.app.user.UserNotLoginFragment;
+import cx.study.auction.bean.User;
+import cx.study.auction.event.LogoutEvent;
+import cx.study.auction.event.MoreClickEvent;
+import cx.study.auction.model.dao.UserDao;
 
 public class HomeActivity extends BaseActivity {
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
     @Bind(R.id.fragment_container)
     FrameLayout frameLayout;
     @Bind(R.id.bnv_bottom_menu)
     BottomNavigationView bottomMenu;
-    @Bind(R.id.tv_search)
-    TextView tv_search;
 
     Fragment homeFragment;
     Fragment typeFragment;
     Fragment userFragment;
     Fragment auctionFragment;
-
+    User user;
     private void initHomeToolBar(){
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
-            setSupportActionBar(toolbar);
-            toolbar.setTitle(getTitle());
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
     }
 
-    private void initOtherToolBar(){
+    private void initToolBar(String title){
         if (getSupportActionBar() != null){
-            getSupportActionBar().hide();
-            initToolbar();
+            getSupportActionBar().show();
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimaryDark));
+            getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.color_blue));
         }
-        setTitle("我的拍卖");
+        setTitle(title);
     }
-    private void initToolbarByOrange(){
-        if (getSupportActionBar() != null){
-            getSupportActionBar().hide();
-            initToolbar();
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(android.R.color.holo_orange_light));
-        }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        //super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override
@@ -71,7 +63,9 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        user = new UserDao(this).getLocalUser();
         initHomeToolBar();
+        EventBus.getDefault().register(this);
         final FragmentManager fm = getSupportFragmentManager();
 
         homeFragment = fm.findFragmentById(R.id.fragment_container);
@@ -88,35 +82,42 @@ public class HomeActivity extends BaseActivity {
                 switch (item.getItemId()){
                     case R.id.homePage:
                         initHomeToolBar();
-                        tv_search.setVisibility(View.VISIBLE);
                         if (homeFragment == null) {
                             homeFragment = HomeFragment.getInstance();
                         }
                         transaction.replace(R.id.fragment_container,homeFragment);
                         break;
                     case R.id.type:
-                        initHomeToolBar();
-                        tv_search.setVisibility(View.VISIBLE);
+                        initToolBar("类别");
                         if (typeFragment == null) {
                             typeFragment = TypeFragment.getInstance();
                         }
                         transaction.replace(R.id.fragment_container,typeFragment);
                         break;
                     case R.id.auction:
-                        initOtherToolBar();
-                        tv_search.setVisibility(View.GONE);
-                        if (auctionFragment == null) {
-                            auctionFragment = AuctionFragment.getInstance();
+                        initToolBar("我的拍卖");
+                        if (user == null){
+                            Fragment fragment = new UserNotLoginFragment();
+                            transaction.replace(R.id.fragment_container,fragment);
+                        } else {
+                            if (auctionFragment == null) {
+                                auctionFragment = AuctionFragment.getInstance();
+                            }
+                            transaction.replace(R.id.fragment_container, auctionFragment);
                         }
-                        transaction.replace(R.id.fragment_container,auctionFragment);
                         break;
                     case R.id.user:
-                        initToolbarByOrange();
-                        tv_search.setVisibility(View.GONE);
-                        if (userFragment == null) {
-                            userFragment = UserFragment.getInstance();
+                        initToolBar("我的信息");
+                        if (user == null){
+                            Fragment fragment = new UserNotLoginFragment();
+                            transaction.replace(R.id.fragment_container,fragment);
+                        } else {
+                            if (userFragment == null) {
+                                userFragment = UserFragment.getInstance();
+                            }
+                            transaction.replace(R.id.fragment_container,userFragment);
                         }
-                        transaction.replace(R.id.fragment_container,userFragment);
+
                         break;
                 }
                 transaction.commit();
@@ -126,18 +127,29 @@ public class HomeActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.tv_search)
-    public void search(TextView textView){
-        Intent intent = new Intent(this, SearchActivity.class);
-        startActivity(intent);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoreClickEvent(MoreClickEvent event){
+        initToolBar("类别");
+        bottomMenu.getMenu().getItem(1).setChecked(true);
+        FragmentManager fm = getSupportFragmentManager();
+        if (typeFragment == null) {
+            typeFragment = TypeFragment.getInstance();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("type",event.type);
+        typeFragment.setArguments(bundle);
+        fm.beginTransaction().replace(R.id.fragment_container,typeFragment).commit();
+
     }
 
-//    @Override
-//    public void onActionClick(ActionItem item) {
-//        super.onActionClick(item);
-//        if (item.getItemId() == R.drawable.icon_setting){
-//            Intent intent = new Intent(this, SettingActivity.class);
-//            startActivity(intent);
-//        }
-//    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogoutEvent(LogoutEvent event){
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

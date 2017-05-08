@@ -9,15 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 import cx.study.auction.R;
 import cx.study.auction.bean.Commodity;
 import cx.study.auction.bean.Commodity.CommodityStatus;
-import cx.study.auction.contants.HttpRest;
 import cx.study.auction.util.DateUtil;
+import cx.study.auction.util.PicassoUtil;
 
 /**
  *
@@ -105,10 +103,7 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.Comm
         public void setCommodity(final Activity context , final Commodity commodity){
             Integer status = commodity.getStatus();
             String imageUrl = commodity.getImageUrls().get(0);
-            Picasso.with(context)
-                    .load(HttpRest.SERVER_URL + imageUrl)
-                    //.resize(200,200)
-                    .into(itemImage);
+            PicassoUtil.show(itemImage,imageUrl);
             switch (status){
                 case CommodityStatus.AUCTION:
                     itemTextLeft.setText(DateUtil.getDateString(commodity.getEndTime()) + " 结束");
