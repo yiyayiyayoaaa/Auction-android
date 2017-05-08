@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -85,7 +86,12 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
        if (order != null){
            String address = null;
            if (!TextUtils.isEmpty(order.getAddress())) {
-               String[] strings = order.getAddress().split("@");
+               String[] strings;
+               if (order.getAddress().contains("@")){
+                strings = order.getAddress().split("@");
+               } else {
+                   strings = order.getAddress().split(" ");
+               }
                address = "收货人：" + strings[0] + "\n\n手机号：" + strings[1] + "\n\n收货地址：" + strings[2] + " " + strings[3];
            }
            StringBuilder orderInfo = new StringBuilder("订单编号：")
@@ -95,7 +101,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
            tvAddress.setText(address);
            tvName.setText(order.getCommodityName());
            tvPrice.setText("成交价："+ order.getPrice() + "元");
-           tvDescription.setText(order.getDescription());
+           tvDescription.setText(Html.fromHtml(order.getDescription()));
            PicassoUtil.show(orderImage,order.getUrl());
            switch (order.getStatus()){
                case Order.OrderStatus.WAIT_PAY:

@@ -53,4 +53,5 @@ dependencies {
     //日志
     compile 'com.github.markzhai:blockcanary-android:1.4.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
 }

@@ -29,6 +29,11 @@ import cx.study.auction.bean.User;
 import cx.study.auction.event.RefreshEvent;
 import cx.study.auction.model.dao.UserDao;
 import cx.study.auction.model.rest.OrderRest;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.MaterialHeader;
+import in.srain.cube.views.ptr.util.PtrLocalDisplay;
 
 /**
  *
@@ -44,7 +49,8 @@ public class OrderListFragment extends BaseFragment{
         fragment.setArguments(bundle);
         return fragment;
     }
-
+    @Bind(R.id.store_house_ptr_frame)
+    PtrFrameLayout ptrFrameLayout;
     @Bind(R.id.recycle_view)
     RecyclerView recyclerView;
     private int status;
@@ -91,13 +97,43 @@ public class OrderListFragment extends BaseFragment{
         ButterKnife.bind(this,view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+        initRefreshView();
         return view;
     }
+    private void initRefreshView(){
+        final MaterialHeader header = new MaterialHeader(getActivity());
+        header.setPadding(0, PtrLocalDisplay.dp2px(15), 0, PtrLocalDisplay.dp2px(15));
+        ptrFrameLayout.setHeaderView(header);
+        ptrFrameLayout.addPtrUIHandler(header);
+        ptrFrameLayout.disableWhenHorizontalMove(true);
 
+        ptrFrameLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+
+            @Override
+            public void onRefreshBegin(final PtrFrameLayout frame) {
+                geOrderList().continueWith(new Continuation<List<Order>, Object>() {
+                    @Override
+                    public Object then(Task<List<Order>> task) throws Exception {
+                        frame.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ptrFrameLayout.refreshComplete();
+                            }
+                        },500);
+                        return null;
+                    }
+                });
+            }
+        });
+    }
     @Override
     public void onResume() {
         super.onResume();
-        geOrderList();
+        ptrFrameLayout.autoRefresh();
         if (!EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().register(this);
         }

@@ -127,16 +127,16 @@
                 <!--android:lines="1"-->
                 <!--android:padding="10dp"-->
                 <!--/>-->
-            <ImageView
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@android:color/white"
-                android:padding="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_auction_process"
-                android:scaleType="centerInside"
-                />
+            <!--<ImageView-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_marginBottom="5dp"-->
+                <!--android:background="@android:color/white"-->
+                <!--android:padding="8dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/img_auction_process"-->
+                <!--android:scaleType="centerInside"-->
+                <!--/>-->
             <TextView
                 android:background="@android:color/white"
                 android:layout_width="match_parent"
@@ -223,13 +223,13 @@
                 android:textSize="16sp"
                 tools:text="dasdasdasdasdasdadasdasda"
                 />
-            <ImageView
-                android:background="@android:color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_auction_description"
-                android:scaleType="fitStart"
-                />
+            <!--<ImageView-->
+                <!--android:background="@android:color/white"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/img_auction_description"-->
+                <!--android:scaleType="fitStart"-->
+                <!--/>-->
         </LinearLayout>
 
     </ScrollView>

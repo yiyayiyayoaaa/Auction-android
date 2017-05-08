@@ -2,6 +2,8 @@ package cx.study.auction.model.rest.json2object;
 
 import org.json.JSONObject;
 
+import java.util.Date;
+
 import cx.study.auction.bean.BidRecord;
 import cx.study.auction.model.rest.http.MCException;
 import cx.study.auction.util.DateUtil;
@@ -19,9 +21,9 @@ public class Json2BidRecord implements Json2Object<BidRecord>{
         }
         BidRecord record = new BidRecord();
         record.setId(jsonObject.optInt("id"));
-        record.setCommodityId(jsonObject.optInt("commodityId"));
-        record.setUserId(jsonObject.optInt("userId"));
-        record.setBidTime(DateUtil.getDateByString(jsonObject.optString("bidTime")));
+        record.setCommodityId(jsonObject.optJSONObject("auction").optInt("id"));
+        record.setUserId(jsonObject.optJSONObject("user").optInt("id"));
+        record.setBidTime(new Date(jsonObject.optLong("bidTime")));
         record.setPrice(jsonObject.optDouble("price"));
         return record;
     }

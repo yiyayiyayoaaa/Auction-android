@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,7 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionH
     public static class AuctionHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_name)TextView tvName;
         @Bind(R.id.tv_price)TextView tvPrice;
+        @Bind(R.id.tv_description)TextView tvDescription;
         @Bind(R.id.tv_status)TextView tvStatus;
         @Bind(R.id.tv_time)TextView tvTime;
         @Bind(R.id.item_image)ImageView itemImage;
@@ -76,6 +78,7 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionH
             String time = null;
             Drawable drawable = null;
             tvStatus.setTextColor(context.getResources().getColor(android.R.color.white));
+            tvDescription.setText(Html.fromHtml(commodity.getDescription()));
             switch (commodity.getStatus()){
                 case CommodityStatus.AUCTION:
                     status = "拍卖中";

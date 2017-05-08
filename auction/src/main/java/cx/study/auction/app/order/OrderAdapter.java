@@ -3,6 +3,7 @@ package cx.study.auction.app.order;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
         @Bind(R.id.btn_received)TextView btnReceived;
         @Bind(R.id.image_order)ImageView orderImage;
         @Bind(R.id.layout_tool)LinearLayout layoutTool;
+        @Bind(R.id.tv_description)TextView tvDescription;
         private Order order;
         public OrderHolder(View itemView) {
             super(itemView);
@@ -87,6 +89,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
             tvOrderNum.setText(order.getOrderNum());
             tvPrice.setText("金额："+ order.getPrice() + "元");
             tvTime.setText("创建时间："+ DateUtil.getDateTimeString(order.getStartTime()));
+            tvDescription.setText(Html.fromHtml(order.getDescription()));
             PicassoUtil.show(orderImage,order.getUrl());
             switch (order.getStatus()){
                 case Order.OrderStatus.WAIT_PAY:

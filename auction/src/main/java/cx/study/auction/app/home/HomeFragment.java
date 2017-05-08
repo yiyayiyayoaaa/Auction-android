@@ -46,6 +46,12 @@ import cx.study.auction.event.ViewPagerChangeEvent;
 import cx.study.auction.model.rest.HomeRest;
 import cx.study.auction.util.DateUtil;
 import cx.study.auction.util.PicassoUtil;
+import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.MaterialHeader;
+import in.srain.cube.views.ptr.util.PtrLocalDisplay;
 
 import static org.greenrobot.eventbus.EventBus.TAG;
 
@@ -59,8 +65,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public static Fragment getInstance(){
         return new HomeFragment();
     }
-    @Bind(R.id.swipe)
-    SwipeRefreshLayout swipe;
+//    @Bind(R.id.swipe)
+//    SwipeRefreshLayout swipe;
+    @Bind(R.id.store_house_ptr_frame)
+    PtrFrameLayout ptrFrameLayout;
     @Bind(R.id.view_pager)
     ViewPager viewPager;
     @Bind(R.id.home_recycle_view)
@@ -78,23 +86,46 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         homeRest = new HomeRest();
         fm = getFragmentManager();
     }
+    private void initRefreshView(){
+        final MaterialHeader header = new MaterialHeader(getActivity());
+        header.setPadding(0, PtrLocalDisplay.dp2px(15), 0, PtrLocalDisplay.dp2px(15));
+        ptrFrameLayout.setHeaderView(header);
+        ptrFrameLayout.addPtrUIHandler(header);
+        ptrFrameLayout.disableWhenHorizontalMove(true);
 
+        ptrFrameLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+
+            @Override
+            public void onRefreshBegin(final PtrFrameLayout frame) {
+                loadData().continueWith(new Continuation<List<HomeItem>, Object>() {
+                    @Override
+                    public Object then(Task<List<HomeItem>> task) throws Exception {
+                        frame.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ptrFrameLayout.refreshComplete();
+                            }
+                        },500);
+                        return null;
+                    }
+                });
+            }
+        });
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home,null);
+        View view = inflater.inflate(R.layout.fragment_home,container,false);
         ButterKnife.bind(this,view);
-        swipe.setOnRefreshListener(this);
+        //swipe.setOnRefreshListener(this);
 
         initViewPager();
-        //loadData();
-        swipe.post(new Runnable() {
-            @Override
-            public void run() {
-                swipe.setRefreshing(true);
-                loadData();
-            }
-        });
+//        final PtrClassicDefaultHeader header = new PtrClassicDefaultHeader(getActivity());
+      initRefreshView();
         return view;
     }
 
@@ -112,7 +143,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onPause() {
         super.onPause();
-        swipe.setRefreshing(false);
+//        swipe.setRefreshing(false);
         EventBus.getDefault().unregister(this);
         if (executorService != null){
             executorService.shutdown();
@@ -122,6 +153,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onResume() {
         super.onResume();
+        ptrFrameLayout.autoRefresh();
         EventBus.getDefault().register(this);
         if (executorService == null){
             startViewPagerAuto();
@@ -180,7 +212,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }).continueWith(new Continuation<List<HomeItem>, List<HomeItem>>() {
             @Override
             public List<HomeItem> then(Task<List<HomeItem>> task) throws Exception {
-                swipe.setRefreshing(false);
+//                swipe.setRefreshing(false);
                 Activity context = ref.get();
                 if (context == null || context.isFinishing()){
                     return null;

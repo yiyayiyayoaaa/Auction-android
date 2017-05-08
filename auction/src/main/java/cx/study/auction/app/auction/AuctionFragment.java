@@ -25,6 +25,11 @@ import cx.study.auction.bean.Commodity;
 import cx.study.auction.bean.User;
 import cx.study.auction.model.dao.UserDao;
 import cx.study.auction.model.rest.CommodityRest;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.MaterialHeader;
+import in.srain.cube.views.ptr.util.PtrLocalDisplay;
 
 /**
  *
@@ -36,7 +41,8 @@ public class AuctionFragment extends BaseFragment{
     public static Fragment getInstance() {
         return new AuctionFragment();
     }
-
+    @Bind(R.id.store_house_ptr_frame)
+    PtrFrameLayout ptrFrameLayout;
     @Bind(R.id.recycle_view)
     RecyclerView recyclerView;
     AuctionAdapter adapter;
@@ -52,20 +58,51 @@ public class AuctionFragment extends BaseFragment{
         user = new UserDao(getActivity()).getLocalUser();
     }
 
+    private void initRefreshView(){
+        final MaterialHeader header = new MaterialHeader(getActivity());
+        header.setPadding(0, PtrLocalDisplay.dp2px(15), 0, PtrLocalDisplay.dp2px(15));
+        ptrFrameLayout.setHeaderView(header);
+        ptrFrameLayout.addPtrUIHandler(header);
+        ptrFrameLayout.disableWhenHorizontalMove(true);
+
+        ptrFrameLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+
+            @Override
+            public void onRefreshBegin(final PtrFrameLayout frame) {
+                loadData().continueWith(new Continuation<List<Commodity>, Object>() {
+                    @Override
+                    public Object then(Task<List<Commodity>> task) throws Exception {
+                        frame.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ptrFrameLayout.refreshComplete();
+                            }
+                        },500);
+                        return null;
+                    }
+                });
+            }
+        });
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_auction,null);
+        View view = inflater.inflate(R.layout.fragment_auction,container,false);
         ButterKnife.bind(this,view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+        initRefreshView();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadData();
+        ptrFrameLayout.autoRefresh();
     }
 
     private Task<List<Commodity>> loadData(){

@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/swipe"
+<in.srain.cube.views.ptr.PtrFrameLayout
+    android:id="@+id/store_house_ptr_frame"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/light_gray"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    cube_ptr:ptr_resistance="1.7"
+    cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+    cube_ptr:ptr_duration_to_close="300"
+    cube_ptr:ptr_duration_to_close_header="2000"
+    cube_ptr:ptr_keep_header_when_refresh="true"
+    cube_ptr:ptr_pull_to_fresh="false"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cube_ptr="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="I am a TextView"
+        android:textSize="30sp" />
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -31,5 +45,5 @@
 
         </LinearLayout>
     </ScrollView>
-</android.support.v4.widget.SwipeRefreshLayout>
+</in.srain.cube.views.ptr.PtrFrameLayout>
 

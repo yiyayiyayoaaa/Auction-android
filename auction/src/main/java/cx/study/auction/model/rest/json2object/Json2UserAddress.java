@@ -17,9 +17,14 @@ public class Json2UserAddress implements Json2Object<UserAddress>{
             return null;
         }
         UserAddress userAddress = new UserAddress();
+        String name = jsonObject.optString("name");
+        String phone = jsonObject.optString("phone");
+        String address = jsonObject.optString("address");
+        address = name + "@" + phone + "@" + address;
+        int userId = jsonObject.optJSONObject("user").optInt("id");
         userAddress.setId(jsonObject.optInt("id"));
-        userAddress.setUserId(jsonObject.optInt("userId"));
-        userAddress.setAddress(jsonObject.optString("address"));
+        userAddress.setUserId(userId);
+        userAddress.setAddress(address);
         return userAddress;
     }
 }

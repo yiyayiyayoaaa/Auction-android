@@ -27,23 +27,6 @@ import okhttp3.Response;
 
 public class HomeRest extends AbstractRest{
 
-//    public List<HomeItem> getHomeInfo() throws Exception {
-//        OkHttpClient okHttpClient = new OkHttpClient();
-//        Request request = new Request.Builder()
-//                .get()
-//                .url(HttpRest.HOME_PAGE_REST)
-//                .build();
-//        Response response = okHttpClient.newCall(request).execute();
-//        String json = response.body().string();
-//        Log.e("dd", "getHomeInfo: " + json);
-//        List<HomeItem> homeItems = Lists.newArrayList();
-//       JSONArray jsonArray = new JSONArray(json);
-//        for (int i = 0; i < jsonArray.length(); i ++){
-//            HomeItem homeItem = new Json2HomeItem().json2Object(jsonArray.optJSONObject(i));
-//            homeItems.add(homeItem);
-//        }
-//        return homeItems;
-//    }
     public List<HomeItem> getHomeInfo() throws MCException {
         Map<String, Object> jsonObj = Maps.newHashMap();
         jsonObj.put("id", 1);

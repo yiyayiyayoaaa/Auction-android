@@ -35,6 +35,7 @@
         <activity android:name=".app.order.OrderListActivity"/>
         <activity android:name=".app.order.OrderActivity"/>
         <activity android:name=".app.user.SettingActivity"/>
+        <activity android:name=".app.user.NicknameSetActivity"/>
     </application>
 
 </manifest>

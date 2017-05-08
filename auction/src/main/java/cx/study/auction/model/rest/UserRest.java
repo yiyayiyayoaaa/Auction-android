@@ -56,4 +56,18 @@ public class UserRest extends AbstractRest{
         HttpResult response = HttpClient.doJSONPost(HttpRest.USER_INFO,jsonObj);
         return new Json2User().json2Object(response.object());
     }
+
+    public void updateNickname(int userId,String nickname) throws MCException {
+        Map<String, Object> jsonObj = Maps.newHashMap();
+        jsonObj.put("id", userId);
+        jsonObj.put("nickname", nickname);
+        HttpClient.doJSONPost(HttpRest.USER_NICKNAME,jsonObj);
+    }
+
+    public void updateGender(int userId,int gender) throws MCException {
+        Map<String, Object> jsonObj = Maps.newHashMap();
+        jsonObj.put("id", userId);
+        jsonObj.put("nickname", gender);
+        HttpClient.doJSONPost(HttpRest.USER_GENDER,jsonObj);
+    }
 }

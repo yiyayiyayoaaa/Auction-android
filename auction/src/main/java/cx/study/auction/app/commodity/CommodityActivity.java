@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -117,8 +119,10 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
         biddingDeposit.setText(getString(R.string.bidding_deposit,commodity.getBiddingDeposit()));
         reversePrice.setText(getString(R.string.reverse_price,commodity.getReservePrice()));
         bidIncrements.setText(getString(R.string.bid_increments,commodity.getBidIncrements()));
-        commodityDescription.setText(commodity.getDescription());
-       // tvCustomer.setText(getString(R.string.customer,commodity.getCustomerName()));
+        //commodityDescription.setText(commodity.getDescription());
+        Spanned spanned = Html.fromHtml(commodity.getDescription());
+        commodityDescription.setText(spanned);
+        // tvCustomer.setText(getString(R.string.customer,commodity.getCustomerName()));
 
     }
 

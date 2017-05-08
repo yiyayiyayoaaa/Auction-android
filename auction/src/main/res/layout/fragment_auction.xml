@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<in.srain.cube.views.ptr.PtrFrameLayout
+    cube_ptr:ptr_resistance="1.7"
+    android:id="@+id/store_house_ptr_frame"
+    cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+    cube_ptr:ptr_duration_to_close="300"
+    cube_ptr:ptr_duration_to_close_header="2000"
+    cube_ptr:ptr_keep_header_when_refresh="true"
+    cube_ptr:ptr_pull_to_fresh="false"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:background="@color/light_gray"
     android:layout_height="match_parent">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+</in.srain.cube.views.ptr.PtrFrameLayout>
