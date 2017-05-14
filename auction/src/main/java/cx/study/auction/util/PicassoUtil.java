@@ -63,7 +63,7 @@ public class PicassoUtil {
 //		} else {
 //			uri = Uri.parse(imageUrl);
 //		}
-        final String url = HttpRest.BASE_URL + imageUrl;
+        final String url = HttpRest.IMAGE_URL + imageUrl;
 	    final WeakReference<ImageView> reference = new WeakReference<>(targetImg);
 	    //  1st try with Last-Modified support
 	    picassoWithLastModified.load(url)

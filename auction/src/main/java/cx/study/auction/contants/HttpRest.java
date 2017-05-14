@@ -8,6 +8,7 @@ package cx.study.auction.contants;
 public interface HttpRest {
    // String SERVER_URL = "http://192.168.0.109:8080/";
     String SERVER_URL = "http://192.168.92.2:8080/auction/";
+    String IMAGE_URL = "http://192.168.92.2:8088/";
     String BASE_URL = SERVER_URL;
     String HOME_PAGE_REST = BASE_URL + "rest/homeInfo";
 
@@ -51,4 +52,5 @@ public interface HttpRest {
 
     String HOME_REST = BASE_URL + "homeRest/";
     String HOME_INFO = HOME_REST + "homeInfo";
+    String HOME_TITLE = HOME_REST + "random-view";
 }

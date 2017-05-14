@@ -63,9 +63,13 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        user = new UserDao(this).getLocalUser();
         initHomeToolBar();
         EventBus.getDefault().register(this);
+        init();
+    }
+
+    private void init(){
+        user = new UserDao(this).getLocalUser();
         final FragmentManager fm = getSupportFragmentManager();
 
         homeFragment = fm.findFragmentById(R.id.fragment_container);
@@ -125,7 +129,11 @@ public class HomeActivity extends BaseActivity {
             }
         });
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //init();
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoreClickEvent(MoreClickEvent event){

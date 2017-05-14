@@ -104,12 +104,12 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 loadData().continueWith(new Continuation<List<HomeItem>, Object>() {
                     @Override
                     public Object then(Task<List<HomeItem>> task) throws Exception {
-                        frame.postDelayed(new Runnable() {
+                        frame.post(new Runnable() {
                             @Override
                             public void run() {
                                 ptrFrameLayout.refreshComplete();
                             }
-                        },500);
+                        });
                         return null;
                     }
                 });
@@ -123,7 +123,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         ButterKnife.bind(this,view);
         //swipe.setOnRefreshListener(this);
 
-        initViewPager();
 //        final PtrClassicDefaultHeader header = new PtrClassicDefaultHeader(getActivity());
       initRefreshView();
         return view;
@@ -160,11 +159,19 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
-    private void initViewPager(){
-        for (int i = 0; i < 5; i ++){
+    private void initViewPager(List<Commodity> commodities){
+        for (final Commodity commodity : commodities){
             ImageView view = (ImageView) LayoutInflater.from(getActivity()).inflate(R.layout.view_pager_item, null);
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            PicassoUtil.show(view,"/file/9e979c9d4e3f40018a65d48c2a3590c1.jpg");
+            PicassoUtil.show(view,commodity.getImageUrls().get(0));
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(),CommodityActivity.class);
+                    intent.putExtra("id",commodity.getId());
+                    startActivity(intent);
+                }
+            });
             viewList.add(view);
         }
         viewPager.setAdapter(new PagerAdapter() {
@@ -204,6 +211,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private Task<List<HomeItem>> loadData() {
         final WeakReference<Activity> ref = new WeakReference<Activity>(getActivity());
+        loadTitle();
         return Task.callInBackground(new Callable<List<HomeItem>>() {
             @Override
             public List<HomeItem> call() throws Exception {
@@ -221,6 +229,28 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     adapter = new HomeAdapter(task.getResult());
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(),6,GridLayoutManager.VERTICAL,false));
                     recyclerView.setAdapter(adapter);
+                }
+                return null;
+            }
+        },Task.UI_THREAD_EXECUTOR);
+    }
+
+    public Task<List<Commodity>> loadTitle(){
+        final WeakReference<Activity> ref = new WeakReference<Activity>(getActivity());
+        return Task.callInBackground(new Callable<List<Commodity>>() {
+            @Override
+            public List<Commodity> call() throws Exception {
+                return homeRest.getCommodity();
+            }
+        }).continueWith(new Continuation<List<Commodity>, List<Commodity>>() {
+            @Override
+            public List<Commodity> then(Task<List<Commodity>> task) throws Exception {
+                Activity context = ref.get();
+                if (context == null || context.isFinishing()){
+                    return null;
+                }
+                if (!task.isFaulted()){
+                    initViewPager(task.getResult());
                 }
                 return null;
             }
@@ -278,7 +308,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(),CommodityActivity.class);
-                    Log.d(TAG, "onClick: " + commodity.getId());
                     intent.putExtra("id",commodity.getId());
                     startActivity(intent);
                 }

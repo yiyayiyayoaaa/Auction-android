@@ -76,12 +76,12 @@ public class AuctionFragment extends BaseFragment{
                 loadData().continueWith(new Continuation<List<Commodity>, Object>() {
                     @Override
                     public Object then(Task<List<Commodity>> task) throws Exception {
-                        frame.postDelayed(new Runnable() {
+                        frame.post(new Runnable() {
                             @Override
                             public void run() {
                                 ptrFrameLayout.refreshComplete();
                             }
-                        },500);
+                        });
                         return null;
                     }
                 });

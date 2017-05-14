@@ -100,6 +100,11 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionH
                     drawable = context.getResources().getDrawable(R.drawable.rectangle_background_red);
                     time = DateUtil.getDateTimeString(commodity.getStartTime()) + "开始";
                     break;
+                default:
+                    status = "已结束";
+                    tvStatus.setTextColor(context.getResources().getColor(android.R.color.black));
+                    drawable = context.getResources().getDrawable(R.drawable.rectangle_background_gray);
+                    break;
 
             }
             PicassoUtil.show(itemImage,commodity.getImageUrls().get(0));

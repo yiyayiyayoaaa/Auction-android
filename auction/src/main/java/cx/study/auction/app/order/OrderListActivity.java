@@ -61,7 +61,6 @@ public class OrderListActivity extends BaseActivity{
         init(type);
         orderRest = new OrderRest();
     }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDoOrderEvent(final DoOrderEvent event){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

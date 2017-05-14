@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import bolts.Continuation;
@@ -101,6 +102,7 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     List<BidRecord> records = Lists.newArrayList();
     private List<ImageView> viewList = Lists.newArrayList();
     private ScheduledExecutorService service;
+    private ScheduledExecutorService service2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,6 +225,16 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
+    public void getBidRecordTimer(final Activity activity){
+        service2 = Executors.newSingleThreadScheduledExecutor();
+        service2.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                getBidRecords(activity);
+            }
+        }, 30, 30, TimeUnit.SECONDS);
+    }
+
     private void showTime(){
         service = Executors.newSingleThreadScheduledExecutor();
         Integer status = commodity.getStatus();
@@ -319,8 +331,14 @@ public class CommodityActivity extends BaseActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         init();
+        getBidRecordTimer(this);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        service2.shutdownNow();
+    }
 
     private int[] getTime(long time){
         int[] i = new int[4];

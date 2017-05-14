@@ -45,7 +45,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-       // loadUserInfo();
+        loadUserInfo();
     }
 
     private Task<User> loadUserInfo(){

@@ -128,7 +128,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                    btnReceived.setVisibility(View.VISIBLE);
                    btnCancel.setVisibility(View.GONE);
                    layoutTool.setVisibility(View.VISIBLE);
-                   orderInfo.append("\n").append("支付时间：")
+                   orderInfo.append("\n\n").append("支付时间：")
                            .append(DateUtil.getDateTimeString(order.getPayTime()));
                    break;
                case Order.OrderStatus.FINISH:

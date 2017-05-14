@@ -67,7 +67,7 @@ public class UserRest extends AbstractRest{
     public void updateGender(int userId,int gender) throws MCException {
         Map<String, Object> jsonObj = Maps.newHashMap();
         jsonObj.put("id", userId);
-        jsonObj.put("nickname", gender);
+        jsonObj.put("gender", gender);
         HttpClient.doJSONPost(HttpRest.USER_GENDER,jsonObj);
     }
 }

@@ -30,7 +30,7 @@ public class HttpClient {
 //        String deviceId = DeviceUtils.getDeviceId(MainApplication.getAppContext());
 
         Map<String, String> headers = Maps.newHashMap();
-        headers.put("_User", "test");//当前操作用户
+        headers.put("_User", "mobile");//当前操作用户
         headers.put("_Timestamp", String.valueOf(System.currentTimeMillis()));//时间
         headers.put("_AppVersion", String.valueOf(BuildConfig.VERSION_CODE));//版本
         headers.put("_AppName", "wxDoctor");//版本
